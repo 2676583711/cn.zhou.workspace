@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>A private company</title>
+  
+<style type="text/css">
+body{
+    background-color:gray;
+ }
+
+#table{
+    position:relative;
+    left:200px;
+    
+    background-color: aqua;
+    width:70%;
+    height:90%;
+  }
+
+  #bar{
+    background-color:darkgoldenrod;
+    width:100%;
+    height:6%;
+  }
+
+  #button{
+    background-color:burlywood;
+    width:125px;
+    height:40px;
+    margin:2px;
+    font-size:1;
+    text-align: center;
+  }
+
+  hr{
+    height: 5px;
+  }
+
+  #myFrame{
+    background-color:seagreen;
+    width:100%;
+    height:600px;
+  }
+
+</style>
+
+<script type="text/javascript">
+ var url="/home/zhou/github/liberalzhou/classes/"
+
+	function show(html){
+		document.getElementById("myFrame").src=url+html
+	}
+
+  </script>
+</head>
+<body>
+
+  <div id="table">
+                <div id="bar">
+                    <input id="button" type="button" value="星期一" onclick="show('one.html')"/>
+
+                    <input id="button" type="button" value="星期二" onclick="show('two.html')" />
+
+                    <input id="button" type="button" value="星期三" onclick="show('three.html')"/>
+
+                    <input id="button" type="button" value="星期四" onclick="show('four.html')"/>
+
+                    <input id="button" type="button" value="星期五" onclick="show('five.html')"/>
+
+                    <input id="button" type="button" value="星期六" onclick="show('six.html')"/>
+
+                    <input id="button" type="button" value="星期日" onclick="show('seven.html')"/>
+                </div>
+     
+                <iframe id="myFrame" scrolling="auto"></iframe>
+   </div>
+
+</body>
+</html>
+
