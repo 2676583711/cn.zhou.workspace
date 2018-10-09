@@ -7,7 +7,42 @@
   <title></title>
 </head>
 <body>
-  <h3>星期六</h3>
+  <h3>星期六
+<script type="text/javascript">
+date=new Date()
+day=date.getDate()  //日期
+month=date.getMonth()+1 //月份
+
+week=Math.ceil(day/7) 
+switch(month){
+ case 9:
+ document.write( "&nbsp;&nbsp;&nbsp;&nbsp; 现在是第")
+ document.write( week+0*4+"周")
+ break
+
+ case 10:
+ document.write( "&nbsp;&nbsp;&nbsp;&nbsp; 现在是第")
+ document.write( week+1*4+"周")
+ break
+
+ case 11:
+ document.write( "&nbsp;&nbsp;&nbsp;&nbsp; 现在是第")
+ document.write( week+2*4+"周")
+ break
+
+ case 12:
+ document.write( "&nbsp;&nbsp;&nbsp;&nbsp; 现在是第")
+ document.write( week+3*4+"周")
+ break
+
+ case 1:
+ document.write( "&nbsp;&nbsp;&nbsp;&nbsp; 现在是第")
+ document.write( week+4*4+"周")
+ break
+ }
+ 
+</script>
+</h3>
   <hr/>
  <h3>  第1、2节: (8:00-9:45): </h3>
  单片机原理实验
