@@ -1,3 +1,4 @@
+
 date=new Date()
 day=date.getDate()  //日期
 month=date.getMonth()+1 //月份
@@ -27,8 +28,9 @@ switch(month){
     week=Math.ceil(day/7) 
  break
  }
-
- day=date.getDay()
+ 
+ var str=""
+ day=date.getDay()  //星期
  switch(day){
     case 1:
     str="一"
@@ -54,12 +56,15 @@ switch(month){
     str="六"
     break;
     
-    case 7:
+    case 0:
     str="天"
     break;
  }
 
- document.write("星期",str)
+ 
+ document.write("星期")
+ document.write(str)
+
  document.write( ":&nbsp;&nbsp;&nbsp;&nbsp; 现在是第")
  document.write( week+"周")
-  
+ 
