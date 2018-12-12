@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="zh-cn"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="origin">
+<title>Jsoup（一）Jsoup详解（官方） - 苦水润喉 - 博客园</title>
+<meta property="og:description" content="一、Jsoup概述 1.1、简介 jsoup 是一款Java 的HTML解析器，可直接解析某个URL地址、HTML文本内容。它提供了一套非常省力的API， 可通过DOM，CSS以及类似于jQuery的">
+<link type="text/css" rel="stylesheet" href="Jsoup%EF%BC%88%E4%B8%80%EF%BC%89Jsoup%E8%AF%A6%E8%A7%A3%EF%BC%88%E5%AE%98%E6%96%B9%EF%BC%89%20-%20%E8%8B%A6%E6%B0%B4%E6%B6%A6%E5%96%89%20-%20%E5%8D%9A%E5%AE%A2%E5%9B%AD_files/blog-common.css">
+<link id="MainCss" type="text/css" rel="stylesheet" href="Jsoup%EF%BC%88%E4%B8%80%EF%BC%89Jsoup%E8%AF%A6%E8%A7%A3%EF%BC%88%E5%AE%98%E6%96%B9%EF%BC%89%20-%20%E8%8B%A6%E6%B0%B4%E6%B6%A6%E5%96%89%20-%20%E5%8D%9A%E5%AE%A2%E5%9B%AD_files/bundle-darkgreentrip.css">
+<link type="text/css" rel="stylesheet" href="Jsoup%EF%BC%88%E4%B8%80%EF%BC%89Jsoup%E8%AF%A6%E8%A7%A3%EF%BC%88%E5%AE%98%E6%96%B9%EF%BC%89%20-%20%E8%8B%A6%E6%B0%B4%E6%B6%A6%E5%96%89%20-%20%E5%8D%9A%E5%AE%A2%E5%9B%AD_files/320169.css">
+<link id="mobile-style" media="only screen and (max-width: 767px)" type="text/css" rel="stylesheet" href="Jsoup%EF%BC%88%E4%B8%80%EF%BC%89Jsoup%E8%AF%A6%E8%A7%A3%EF%BC%88%E5%AE%98%E6%96%B9%EF%BC%89%20-%20%E8%8B%A6%E6%B0%B4%E6%B6%A6%E5%96%89%20-%20%E5%8D%9A%E5%AE%A2%E5%9B%AD_files/bundle-darkgreentrip-mobile.css">
+<link title="RSS" type="application/rss+xml" rel="alternate" href="https://www.cnblogs.com/zhangyinhua/rss">
+<link title="RSD" type="application/rsd+xml" rel="EditURI" href="https://www.cnblogs.com/zhangyinhua/rsd.xml">
+<link type="application/wlwmanifest+xml" rel="wlwmanifest" href="https://www.cnblogs.com/zhangyinhua/wlwmanifest.xml">
+<script src="Jsoup%EF%BC%88%E4%B8%80%EF%BC%89Jsoup%E8%AF%A6%E8%A7%A3%EF%BC%88%E5%AE%98%E6%96%B9%EF%BC%89%20-%20%E8%8B%A6%E6%B0%B4%E6%B6%A6%E5%96%89%20-%20%E5%8D%9A%E5%AE%A2%E5%9B%AD_files/osd.js"></script><script src="Jsoup%EF%BC%88%E4%B8%80%EF%BC%89Jsoup%E8%AF%A6%E8%A7%A3%EF%BC%88%E5%AE%98%E6%96%B9%EF%BC%89%20-%20%E8%8B%A6%E6%B0%B4%E6%B6%A6%E5%96%89%20-%20%E5%8D%9A%E5%AE%A2%E5%9B%AD_files/amp4ads-host-v0.js"></script><script src="Jsoup%EF%BC%88%E4%B8%80%EF%BC%89Jsoup%E8%AF%A6%E8%A7%A3%EF%BC%88%E5%AE%98%E6%96%B9%EF%BC%89%20-%20%E8%8B%A6%E6%B0%B4%E6%B6%A6%E5%96%89%20-%20%E5%8D%9A%E5%AE%A2%E5%9B%AD_files/pubads_impl_rendering_278.js"></script><script async="" src="Jsoup%EF%BC%88%E4%B8%80%EF%BC%89Jsoup%E8%AF%A6%E8%A7%A3%EF%BC%88%E5%AE%98%E6%96%B9%EF%BC%89%20-%20%E8%8B%A6%E6%B0%B4%E6%B6%A6%E5%96%89%20-%20%E5%8D%9A%E5%AE%A2%E5%9B%AD_files/analytics.js"></script><script type="text/javascript" src="Jsoup%EF%BC%88%E4%B8%80%EF%BC%89Jsoup%E8%AF%A6%E8%A7%A3%EF%BC%88%E5%AE%98%E6%96%B9%EF%BC%89%20-%20%E8%8B%A6%E6%B0%B4%E6%B6%A6%E5%96%89%20-%20%E5%8D%9A%E5%AE%A2%E5%9B%AD_files/encoder.js"></script><script src="Jsoup%EF%BC%88%E4%B8%80%EF%BC%89Jsoup%E8%AF%A6%E8%A7%A3%EF%BC%88%E5%AE%98%E6%96%B9%EF%BC%89%20-%20%E8%8B%A6%E6%B0%B4%E6%B6%A6%E5%96%89%20-%20%E5%8D%9A%E5%AE%A2%E5%9B%AD_files/jquery-2.js"></script>
+<script type="text/javascript">var currentBlogApp = 'zhangyinhua', cb_enable_mathjax=false;var isLogined=false;</script>
+<script src="Jsoup%EF%BC%88%E4%B8%80%EF%BC%89Jsoup%E8%AF%A6%E8%A7%A3%EF%BC%88%E5%AE%98%E6%96%B9%EF%BC%89%20-%20%E8%8B%A6%E6%B0%B4%E6%B6%A6%E5%96%89%20-%20%E5%8D%9A%E5%AE%A2%E5%9B%AD_files/blog-common.js" type="text/javascript"></script>
+<link rel="preload" href="Jsoup%EF%BC%88%E4%B8%80%EF%BC%89Jsoup%E8%AF%A6%E8%A7%A3%EF%BC%88%E5%AE%98%E6%96%B9%EF%BC%89%20-%20%E8%8B%A6%E6%B0%B4%E6%B6%A6%E5%96%89%20-%20%E5%8D%9A%E5%AE%A2%E5%9B%AD_files/integrator.js" as="script"><script type="text/javascript" src="Jsoup%EF%BC%88%E4%B8%80%EF%BC%89Jsoup%E8%AF%A6%E8%A7%A3%EF%BC%88%E5%AE%98%E6%96%B9%EF%BC%89%20-%20%E8%8B%A6%E6%B0%B4%E6%B6%A6%E5%96%89%20-%20%E5%8D%9A%E5%AE%A2%E5%9B%AD_files/integrator.js"></script><script src="Jsoup%EF%BC%88%E4%B8%80%EF%BC%89Jsoup%E8%AF%A6%E8%A7%A3%EF%BC%88%E5%AE%98%E6%96%B9%EF%BC%89%20-%20%E8%8B%A6%E6%B0%B4%E6%B6%A6%E5%96%89%20-%20%E5%8D%9A%E5%AE%A2%E5%9B%AD_files/pubads_impl_278.js" async=""></script></head>
+<body>
+<a name="top"></a>
+
+<!--done-->
+<div id="home">
+<div id="header">
+	<div id="blogTitle">
+	<a id="lnkBlogLogo" href="https://www.cnblogs.com/zhangyinhua/"><img id="blogLogo" src="Jsoup%EF%BC%88%E4%B8%80%EF%BC%89Jsoup%E8%AF%A6%E8%A7%A3%EF%BC%88%E5%AE%98%E6%96%B9%EF%BC%89%20-%20%E8%8B%A6%E6%B0%B4%E6%B6%A6%E5%96%89%20-%20%E5%8D%9A%E5%AE%A2%E5%9B%AD_files/logo.gif" alt="返回主页"></a>			
+		
+<!--done-->
+<h1><a id="Header1_HeaderTitle" class="headermaintitle" href="https://www.cnblogs.com/zhangyinhua/">LanceToBigData</a></h1>
+<h2></h2>
+
+
+
+		
+	</div><!--end: blogTitle 博客的标题和副标题 -->
+	<div id="navigator">
+		
+<ul id="navList">
+<li><a id="blog_nav_sitehome" class="menu" href="https://www.cnblogs.com/">博客园</a></li>
+<li><a id="blog_nav_myhome" class="menu" href="https://www.cnblogs.com/zhangyinhua/">首页</a></li>
+<li><a id="blog_nav_newpost" class="menu" rel="nofollow" href="https://i.cnblogs.com/EditPosts.aspx?opt=1">新随笔</a></li>
+<li><a id="blog_nav_contact" class="menu" rel="nofollow" href="https://msg.cnblogs.com/send/%E8%8B%A6%E6%B0%B4%E6%B6%A6%E5%96%89">联系</a></li>
+<li><a id="blog_nav_rss" class="menu" href="https://www.cnblogs.com/zhangyinhua/rss">订阅</a>
+<!--<a id="blog_nav_rss_image" class="aHeaderXML" href="https://www.cnblogs.com/zhangyinhua/rss"><img src="//www.cnblogs.com/images/xml.gif" alt="订阅" /></a>--></li>
+<li><a id="blog_nav_admin" class="menu" rel="nofollow" href="https://i.cnblogs.com/">管理</a></li>
+</ul>
+		<div class="blogStats">
+			
+			<div id="blog_stats">
+<span id="stats_post_count">随笔 - 167&nbsp; </span>
+<span id="stats_article_count">文章 - 0&nbsp; </span>
+<span id="stats-comment_count">评论 - 133</span>
+</div>
+			
+		</div><!--end: blogStats -->
+	</div><!--end: navigator 博客导航栏 -->
+</div><!--end: header 头部 -->
+
+<div id="main">
+	<div id="mainContent">
+	<div class="forFlow">
+		
+<div id="post_detail">
+<!--done-->
+<div id="topics">
+	<div class="post">
+		<h1 class="postTitle">
+			<a id="cb_post_title_url" class="postTitle2" href="https://www.cnblogs.com/zhangyinhua/p/8037599.html">Jsoup（一）Jsoup详解（官方）</a>
+		</h1>
+		<div class="clear"></div>
+		<div class="postBody">
+			<div id="cnblogs_post_body" class="blogpost-body"><h2>一、Jsoup概述</h2>
+<h3>1.1、简介</h3>
+<div>&nbsp;&nbsp; &nbsp;jsoup 是一款Java 的HTML解析器，可直接解析某个URL地址、HTML文本内容。它提供了一套非常省力的API，</div>
+<div>　可通过DOM，CSS以及类似于jQuery的操作方法来取出和操作数据。</div>
+<h3>1.2、Jsoup的主要功能</h3>
+<div>&nbsp; &nbsp; 1）从一个URL，文件或字符串中解析HTML</div>
+<div>&nbsp; &nbsp; 2）使用DOM或CSS选择器来查找、取出数据</div>
+<div>&nbsp; &nbsp; 3）可操作HTML元素、属性、文本</div>
+<div>&nbsp; &nbsp; 注意：jsoup是基于MIT协议发布的，可放心使用于商业项目。</div>
+<h3>1.3、jsoup 的主要类层次结构</h3>
+<div>　　<img src="Jsoup%EF%BC%88%E4%B8%80%EF%BC%89Jsoup%E8%AF%A6%E8%A7%A3%EF%BC%88%E5%AE%98%E6%96%B9%EF%BC%89%20-%20%E8%8B%A6%E6%B0%B4%E6%B6%A6%E5%96%89%20-%20%E5%8D%9A%E5%AE%A2%E5%9B%AD_files/999804-20171214131622060-1113631770.png" alt=""></div>
+<h2>二、入门</h2>
+<h3>2.1、解析和遍历一个HTML文档</h3>
+<div>　　如何解析一个HTML文档：
+<div class="cnblogs_code">
+<pre>String html = <span style="color: #800000;">"</span><span style="color: #800000;">&lt;html&gt;&lt;head&gt;&lt;title&gt;First parse&lt;/title&gt;&lt;/head&gt;</span><span style="color: #800000;">"</span>
++ <span style="color: #800000;">"</span><span style="color: #800000;">&lt;body&gt;&lt;p&gt;Parsed HTML into a doc.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</span><span style="color: #800000;">"</span><span style="color: #000000;">;
+Document doc </span>= Jsoup.parse(html);</pre>
+</div>
+</div>
+<div>　　其解析器能够尽最大可能从你提供的HTML文档来创见一个干净的解析结果，无论HTML的格式是否完整。比如它可以处理：</div>
+<div>　　　　1）没有关闭的标签&nbsp;
+<div class="cnblogs_code">
+<pre>            &lt;p&gt;Lorem &lt;p&gt;Ipsum parses to &lt;p&gt;Lorem&lt;/p&gt; &lt;p&gt;Ipsum&lt;/p&gt;</pre>
+</div>
+</div>
+<div>　　　　2）隐式标签&nbsp;
+<div class="cnblogs_code">
+<pre>        它可以自动将 &lt;td&gt;Table data&lt;/td&gt;包装成&lt;table&gt;&lt;tr&gt;&lt;td&gt;?</pre>
+</div>
+</div>
+<div>　　　　3）创建可靠的文档结构&nbsp;&nbsp;
+<div class="cnblogs_code">
+<pre> html标签包含head 和 body，在head只出现恰当的元素</pre>
+</div>
+</div>
+<div>
+<h3>&nbsp; &nbsp; 2.2、一个文档的对象模型&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;</h3>
+</div>
+<div>&nbsp;&nbsp; &nbsp;&nbsp; &nbsp; 1）文档由多个Elements和TextNodes组成</div>
+<div>&nbsp;&nbsp; &nbsp;&nbsp; &nbsp; 2）其继承结构如下：Document继承Element继承Node. TextNode继承 Node.</div>
+<div>&nbsp;&nbsp; &nbsp;&nbsp; &nbsp; 3）一个Element包含一个子节点集合，并拥有一个父Element。他们还提供了一个唯一的子元素过滤列表。</div>
+<h2>三、输入</h2>
+<h3>3.1、解析一个HTML字符串</h3>
+<div>　　1）存在问题</div>
+<div>　　　　来自<span style="color: #ff0000;">用户输入，一个文件或一个网站的HTML字符串，你可能需要对它进行解析并取其内容，或校验其格式是否完整</span>，</div>
+<div>　　　　或想修改它。怎么办？&nbsp;jsoup能够帮你轻松解决这些问题</div>
+<div>　　2）解决方法</div>
+<div>&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;　　使用<span style="color: #ff0000;">静态Jsoup.parse(String html) 方法或 Jsoup.parse(String html, String baseUri)</span>
+<div class="cnblogs_code">
+<pre>String html = <span style="color: #800000;">"</span><span style="color: #800000;">&lt;html&gt;&lt;head&gt;&lt;title&gt;First parse&lt;/title&gt;&lt;/head&gt;</span><span style="color: #800000;">"</span>
+  + <span style="color: #800000;">"</span><span style="color: #800000;">&lt;body&gt;&lt;p&gt;Parsed HTML into a doc.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</span><span style="color: #800000;">"</span><span style="color: #000000;">;
+Document doc </span>= Jsoup.parse(html);</pre>
+</div>
+</div>
+<div>&nbsp; &nbsp; 3）描述</div>
+<div>&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp; &nbsp; A:</div>
+<div>&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; <span style="color: #ff0000;">&nbsp;parse(String html, String baseUri) 这方法能够将输入的HTML解析为一个新的文档 (Document），参数 baseUri 是用来将相对 URL 转成绝对URL，</span></div>
+<div><span style="color: #ff0000;">　　　　&nbsp; 并指定从哪个网站获取文档。如这个方法不适用，你可以使用 parse(String html) 方法来解析成HTML字符串如上面的示例。</span><span style="color: #ff0000;">&nbsp; &nbsp; &nbsp; &nbsp;&nbsp;</span></div>
+<div>&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;B:</div>
+<div>&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;只要解析的<span style="color: #ff0000;">不是空字符串，就能返回一个结构合理的文档，其中包含(至少) 一个head和一个body元素</span>。</div>
+<div>&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp; &nbsp; C:</div>
+<div>&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;一旦<span style="color: #ff0000;">拥有了一个Document，你就可以使用Document中适当的方法或它父类 Element和Node中的方法来取得相关数据</span>。</div>
+<h3>3.2、解析一个body片断</h3>
+<div>　　1）存在问题</div>
+<div>&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;　　假如你<span style="color: #ff0000;">有一个HTML片断 (比如. 一个 div 包含一对 p 标签; 一个不完整的HTML文档) 想对它进行解析。</span>这个HTML片断可以是用户提交的一条评论</div>
+<div>　　　　或在一个CMS页面中编辑body部分。</div>
+<div>　　2）办法</div>
+<div>&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;<span style="color: #ff0000;"> 使用Jsoup.parseBodyFragment(String html)方法</span>。
+<div class="cnblogs_code">
+<pre>String html = <span style="color: #800000;">"</span><span style="color: #800000;">&lt;div&gt;&lt;p&gt;Lorem ipsum.&lt;/p&gt;</span><span style="color: #800000;">"</span><span style="color: #000000;">;
+Document doc </span>=<span style="color: #000000;"> Jsoup.parseBodyFragment(html);
+Element body </span>= doc.body();</pre>
+</div>
+</div>
+<div>　　3）说明</div>
+<div>&nbsp;&nbsp; &nbsp;&nbsp; &nbsp; A:</div>
+<div>&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;<span style="color: #ff0000;"> &nbsp;parseBodyFragment 方法创建一个空壳的文档，并插入解析过的HTML到body元素中。假如你使用正常的 Jsoup.parse(String html) 方法，</span></div>
+<div><span style="color: #ff0000;">　　　通常你也可以得到相同的结果，但是明确将用户输入作为 body片段处理，以确保用户所提供的任何糟糕的HTML都将被解析成body元素。</span>&nbsp;</div>
+<div>&nbsp;&nbsp; &nbsp;&nbsp; &nbsp; B:</div>
+<div>&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;Document.body() 方法能够取得文档body元素的所有子元素，与 doc.getElementsByTag("body")相同。</div>
+<h3>3.3、从一个URL加载一个Document</h3>
+<div>　　1）存在问题</div>
+<div>　　　　你需要从一个网站获取和解析一个HTML文档，并查找其中的相关数据。</div>
+<div>　　2）解决方法</div>
+<div>　　　<span style="color: #ff0000;">　使用 Jsoup.connect(String url)方法:</span>
+<div class="cnblogs_code">
+<pre>Document doc = Jsoup.connect(<span style="color: #800000;">"</span><span style="color: #800000;">http://example.com/</span><span style="color: #800000;">"</span>).<span style="color: #0000ff;">get</span><span style="color: #000000;">();
+String title </span>= doc.title();</pre>
+</div>
+</div>
+<div>&nbsp; &nbsp; 3）说明</div>
+<div>&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;connect(String url) 方法<span style="color: #ff0000;">创建一个新的 Connection, 和 get() 取得和解析一个HTML文件。如果从该URL获取HTML时发生错误，便会抛出 IOException，应适当处理</span>。</div>
+<div>&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;Connection 接口还提供一个方法链来解决特殊请求，具体如下：
+<div class="cnblogs_code">
+<pre>  Document doc = Jsoup.connect(<span style="color: #800000;">"</span><span style="color: #800000;">http://example.com</span><span style="color: #800000;">"</span><span style="color: #000000;">;)
+  .data(</span><span style="color: #800000;">"</span><span style="color: #800000;">query</span><span style="color: #800000;">"</span>, <span style="color: #800000;">"</span><span style="color: #800000;">Java</span><span style="color: #800000;">"</span><span style="color: #000000;">)
+  .userAgent(</span><span style="color: #800000;">"</span><span style="color: #800000;">Mozilla</span><span style="color: #800000;">"</span><span style="color: #000000;">)
+  .cookie(</span><span style="color: #800000;">"</span><span style="color: #800000;">auth</span><span style="color: #800000;">"</span>, <span style="color: #800000;">"</span><span style="color: #800000;">token</span><span style="color: #800000;">"</span><span style="color: #000000;">)
+  .timeout(</span><span style="color: #800080;">3000</span><span style="color: #000000;">)
+  .post();</span></pre>
+</div>
+</div>
+<div>&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;这个方法只支持Web URLs (http和https 协议); 假如你需要从一个文件加载，可以使用 parse(File in, String charsetName) 代替。</div>
+<h3>3.4、从一个文件加载文档</h3>
+<div>　　1）存在问题</div>
+<div>　　　　在本机硬盘上有一个HTML文件，需要对它进行解析从中抽取数据或进行修改。</div>
+<div>　　2）方法</div>
+<div>　　　　可以使用静态 Jsoup.parse(File in, String charsetName, String baseUri) 方法：
+<div class="cnblogs_code">
+<pre>File input = <span style="color: #0000ff;">new</span> File(<span style="color: #800000;">"</span><span style="color: #800000;">/tmp/input.html</span><span style="color: #800000;">"</span><span style="color: #000000;">);
+Document doc </span>= Jsoup.parse(input, <span style="color: #800000;">"</span><span style="color: #800000;">UTF-8</span><span style="color: #800000;">"</span>, <span style="color: #800000;">"</span><span style="color: #800000;">http://example.com/</span><span style="color: #800000;">"</span>;);</pre>
+</div>
+</div>
+<div>
+<div>&nbsp; &nbsp; 3）说明</div>
+</div>
+<div>&nbsp;&nbsp; &nbsp;&nbsp; &nbsp; A:</div>
+<div>&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;parse(File
+ in, String charsetName, String baseUri) 
+这个方法用来加载和解析一个HTML文件。如在加载文件的时候发生错误，将抛出IOException，应作适当处理。</div>
+<div>&nbsp;&nbsp; &nbsp;&nbsp; &nbsp; B:</div>
+<div>&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;baseUri 参数用于解决文件中URLs是相对路径的问题。如果不需要可以传入一个空的字符串。</div>
+<div>&nbsp;&nbsp; &nbsp;&nbsp; &nbsp; C:</div>
+<div>&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; 
+&nbsp;另外还有一个方法parse(File in, String charsetName) ，它使用文件的路径做为 baseUri。 
+这个方法适用于如果被解析文件位于网站的本地文件系统，</div>
+<div>　　　　且相关链接也指向该文件系统。</div>
+<h2>四、数据抽取</h2>
+<h3>4.1、使用DOM方法来遍历一个文档</h3>
+<div>　　1）存在问题</div>
+<div>　　　　你有一个<span style="color: #ff0000;">HTML文档要从中提取数据，并了解这个HTML文档的结构。</span></div>
+<div>　　2）方法</div>
+<div>　　　　将HTML解析成一个Document之后，就可以使用类似于DOM的方法进行操作。
+<div class="cnblogs_code"><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="Jsoup%EF%BC%88%E4%B8%80%EF%BC%89Jsoup%E8%AF%A6%E8%A7%A3%EF%BC%88%E5%AE%98%E6%96%B9%EF%BC%89%20-%20%E8%8B%A6%E6%B0%B4%E6%B6%A6%E5%96%89%20-%20%E5%8D%9A%E5%AE%A2%E5%9B%AD_files/copycode.gif" alt="复制代码"></a></span></div>
+<pre>File input = <span style="color: #0000ff;">new</span> File(<span style="color: #800000;">"</span><span style="color: #800000;">/tmp/input.html</span><span style="color: #800000;">"</span><span style="color: #000000;">);
+Document doc </span>= Jsoup.parse(input, <span style="color: #800000;">"</span><span style="color: #800000;">UTF-8</span><span style="color: #800000;">"</span>, <span style="color: #800000;">"</span><span style="color: #800000;">http://example.com/</span><span style="color: #800000;">"</span><span style="color: #000000;">);
+
+Element content </span>= doc.getElementById(<span style="color: #800000;">"</span><span style="color: #800000;">content</span><span style="color: #800000;">"</span><span style="color: #000000;">);
+Elements links </span>= content.getElementsByTag(<span style="color: #800000;">"</span><span style="color: #800000;">a</span><span style="color: #800000;">"</span><span style="color: #000000;">);
+</span><span style="color: #0000ff;">for</span><span style="color: #000000;"> (Element link : links) {
+  String linkHref </span>= link.attr(<span style="color: #800000;">"</span><span style="color: #800000;">href</span><span style="color: #800000;">"</span><span style="color: #000000;">);
+  String linkText </span>=<span style="color: #000000;"> link.text();
+}</span></pre>
+<div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="Jsoup%EF%BC%88%E4%B8%80%EF%BC%89Jsoup%E8%AF%A6%E8%A7%A3%EF%BC%88%E5%AE%98%E6%96%B9%EF%BC%89%20-%20%E8%8B%A6%E6%B0%B4%E6%B6%A6%E5%96%89%20-%20%E5%8D%9A%E5%AE%A2%E5%9B%AD_files/copycode.gif" alt="复制代码"></a></span></div></div>
+<p>&nbsp;　　3）说明</p>
+<p>　　　　Elements这个对象提供了一系列类似于<span style="color: #ff0000;">DOM的方法来查找元素，抽取并处理其中的数据</span>。具体如下：</p>
+<p>　　　　A：查看元素</p>
+<div class="cnblogs_code"><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="Jsoup%EF%BC%88%E4%B8%80%EF%BC%89Jsoup%E8%AF%A6%E8%A7%A3%EF%BC%88%E5%AE%98%E6%96%B9%EF%BC%89%20-%20%E8%8B%A6%E6%B0%B4%E6%B6%A6%E5%96%89%20-%20%E5%8D%9A%E5%AE%A2%E5%9B%AD_files/copycode.gif" alt="复制代码"></a></span></div>
+<pre><span style="color: #000000;">　　　　getElementById(String id)
+　　　　getElementsByTag(String tag)
+　　　　getElementsByClass(String className)
+　　　　getElementsByAttribute(String key) (and related methods)
+　　　　Element siblings: siblingElements(), firstElementSibling(), lastElementSibling(); nextElementSibling(), previousElementSibling()
+　　　　Graph: parent(), children(), child(</span><span style="color: #0000ff;">int</span> index)</pre>
+<div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="Jsoup%EF%BC%88%E4%B8%80%EF%BC%89Jsoup%E8%AF%A6%E8%A7%A3%EF%BC%88%E5%AE%98%E6%96%B9%EF%BC%89%20-%20%E8%8B%A6%E6%B0%B4%E6%B6%A6%E5%96%89%20-%20%E5%8D%9A%E5%AE%A2%E5%9B%AD_files/copycode.gif" alt="复制代码"></a></span></div></div>
+<p>　　　　B：元素数据</p>
+<div class="cnblogs_code"><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="Jsoup%EF%BC%88%E4%B8%80%EF%BC%89Jsoup%E8%AF%A6%E8%A7%A3%EF%BC%88%E5%AE%98%E6%96%B9%EF%BC%89%20-%20%E8%8B%A6%E6%B0%B4%E6%B6%A6%E5%96%89%20-%20%E5%8D%9A%E5%AE%A2%E5%9B%AD_files/copycode.gif" alt="复制代码"></a></span></div>
+<pre><span style="color: #000000;">　　　　attr(String key)获取属性attr(String key, String value)设置属性
+　　　　attributes()获取所有属性
+　　　　id(), className() and classNames()
+　　　　text()获取文本内容text(String value) 设置文本内容
+　　　　html()获取元素内HTMLhtml(String value)设置元素内的HTML内容
+　　　　outerHtml()获取元素外HTML内容
+　　　　data()获取数据内容（例如：script和style标签)
+　　　　tag() and tagName()</span></pre>
+<div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="Jsoup%EF%BC%88%E4%B8%80%EF%BC%89Jsoup%E8%AF%A6%E8%A7%A3%EF%BC%88%E5%AE%98%E6%96%B9%EF%BC%89%20-%20%E8%8B%A6%E6%B0%B4%E6%B6%A6%E5%96%89%20-%20%E5%8D%9A%E5%AE%A2%E5%9B%AD_files/copycode.gif" alt="复制代码"></a></span></div></div>
+<p>　　　　C：操作HTML和文本</p>
+<div class="cnblogs_code">
+<pre><span style="color: #000000;">　　　　append(String html), prepend(String html)
+　　　　appendText(String text), prependText(String text)
+　　　　appendElement(String tagName), prependElement(String tagName)
+　　　　html(String value)</span></pre>
+</div>
+<h3>4.2、使用选择器语法来查找元素</h3>
+<p>　　1）存在问题</p>
+<p>　　　　你想使用类似于CSS或jQuery的语法来查找和操作元素。</p>
+<p>　　2）方法</p>
+<p>　　　　可以使用Element.select(String selector) 和 Elements.select(String selector) 方法实现：</p>
+<div class="cnblogs_code"><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="Jsoup%EF%BC%88%E4%B8%80%EF%BC%89Jsoup%E8%AF%A6%E8%A7%A3%EF%BC%88%E5%AE%98%E6%96%B9%EF%BC%89%20-%20%E8%8B%A6%E6%B0%B4%E6%B6%A6%E5%96%89%20-%20%E5%8D%9A%E5%AE%A2%E5%9B%AD_files/copycode.gif" alt="复制代码"></a></span></div>
+<pre>File input = <span style="color: #0000ff;">new</span> File(<span style="color: #800000;">"</span><span style="color: #800000;">/tmp/input.html</span><span style="color: #800000;">"</span><span style="color: #000000;">);
+Document doc </span>= Jsoup.parse(input, <span style="color: #800000;">"</span><span style="color: #800000;">UTF-8</span><span style="color: #800000;">"</span>, <span style="color: #800000;">"</span><span style="color: #800000;">http://example.com/</span><span style="color: #800000;">"</span><span style="color: #000000;">);
+
+Elements links </span>= doc.<span style="color: #0000ff;">select</span>(<span style="color: #800000;">"</span><span style="color: #800000;">a[href]</span><span style="color: #800000;">"</span>); <span style="color: #008000;">//</span><span style="color: #008000;">带有href属性的a元素</span>
+Elements pngs = doc.<span style="color: #0000ff;">select</span>(<span style="color: #800000;">"</span><span style="color: #800000;">img[src$=.png]</span><span style="color: #800000;">"</span><span style="color: #000000;">);
+  </span><span style="color: #008000;">//</span><span style="color: #008000;">扩展名为.png的图片</span>
+<span style="color: #000000;">
+Element masthead </span>= doc.<span style="color: #0000ff;">select</span>(<span style="color: #800000;">"</span><span style="color: #800000;">div.masthead</span><span style="color: #800000;">"</span><span style="color: #000000;">).first();
+  </span><span style="color: #008000;">//</span><span style="color: #008000;">class等于masthead的div标签</span>
+<span style="color: #000000;">
+Elements resultLinks </span>= doc.<span style="color: #0000ff;">select</span>(<span style="color: #800000;">"</span><span style="color: #800000;">h3.r &gt; a</span><span style="color: #800000;">"</span>); <span style="color: #008000;">//</span><span style="color: #008000;">在h3元素之后的a元素</span></pre>
+<div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="Jsoup%EF%BC%88%E4%B8%80%EF%BC%89Jsoup%E8%AF%A6%E8%A7%A3%EF%BC%88%E5%AE%98%E6%96%B9%EF%BC%89%20-%20%E8%8B%A6%E6%B0%B4%E6%B6%A6%E5%96%89%20-%20%E5%8D%9A%E5%AE%A2%E5%9B%AD_files/copycode.gif" alt="复制代码"></a></span></div></div>
+<p>　　3）说明</p>
+<p>　　　　jsoup elements对象支持<span style="color: #ff0000;">类似于CSS (或jquery)的选择器语法，来实现非常强大和灵活的查找功能</span>。.</p>
+<p>　　　　这个select 方法<span style="color: #ff0000;">在Document, Element,或Elements对象中都可以使用。且是上下文相关的，因此可实现指定元素的过滤，或者链式选择访问</span>。</p>
+<p>　　　　Select方法将<span style="color: #ff0000;">返回一个Elements集合，并提供一组方法来抽取和处理结果</span>。</p>
+<p>　　　　A：Selector选择器概述　　　</p>
+<p>　　　　　　tagname: <span style="color: #ff0000;">通过标签查找元素</span>，比如：a<br>　　　　　　ns|tag: <span style="color: #ff0000;">通过标签在命名空间查找元素</span>，比如：可以用 fb|name 语法来查找 &lt;fb:name&gt; 元素<br>　　　　　　#id: <span style="color: #ff0000;">通过ID查找元素</span>，比如：#logo<br>　　　　　　.class: 通过class名称查找元素，比如：.masthead<br>　　　　　　[attribute]: <span style="color: #ff0000;">利用属性查找元素</span>，比如：[href]<br>　　　　　　[^attr]: <span style="color: #ff0000;">利用属性名前缀来查找元素</span>，比如：可以用[^data-] 来查找带有HTML5 Dataset属性的元素<br>　　　　　　[attr=value]: <span style="color: #ff0000;">利用属性值来查找元素</span>，比如：[width=500]<br>　　　　　　[attr^=value], [attr$=value], [attr*=value]: 利用<span style="color: #ff0000;">匹配属性值开头、结尾或包含属性值来查找元素</span>，比如：[href*=/path/]<br>　　　　　　[attr~=regex]: 利用<span style="color: #ff0000;">属性值匹配正则表达式来查找元素</span>，比如： img[src~=(?i)\.(png|jpe?g)]<br>　　　　　　*: 这个符号将匹配所有元素</p>
+<p>　　　　B：Selector选择器组合使用</p>
+<p>　　　　　　el#id:<span style="color: #ff0000;"> 元素+ID</span>，比如： div#logo<br>　　　　　　el.class: <span style="color: #ff0000;">元素+class</span>，比如： div.masthead<br>　　　　　　el[attr]: <span style="color: #ff0000;">元素+class</span>，比如： a[href]<br>　　　　　　任意组合，比如：<span style="color: #ff0000;">a[href].highlight</span><br>　　　　　　ancestor child: <span style="color: #ff0000;">查找某个元素下子元素</span>，比如：可以用.body p 查找在"body"元素下的所有 p元素<br>　　　　　　parent &gt; child: <span style="color: #ff0000;">查找某个父元素下的直接子元素</span>，比如：可以用div.content &gt; p 查找 p 元素，也可以用body &gt; * 查找body标签下所有直接子元素<br>　　　　　　siblingA + siblingB: <span style="color: #ff0000;">查找在A元素之前第一个同级元素B</span>，比如：div.head + div<br>　　　　　　siblingA ~ siblingX: <span style="color: #ff0000;">查找A元素之前的同级X元素</span>，比如：h1 ~ p<br>　　　　　　el, el, el:多个选择器组合，查找匹配任一选择器的唯一元素，例如：div.masthead, div.logo</p>
+<p>　　　　C：伪选择器selectors</p>
+<p>　　　　　　:lt(n): 查找哪些元素的同级索引值（它的位置在DOM树中是相对于它的父节点）小于n，比如：td:lt(3) 表示小于三列的元素<br>　　　　　　:gt(n):查找哪些元素的同级索引值大于n，比如： div p:gt(2)表示哪些div中有包含2个以上的p元素<br>　　　　　　:eq(n): 查找哪些元素的同级索引值与n相等，比如：form input:eq(1)表示包含一个input标签的Form元素<br>　　　　　　:has(seletor): 查找匹配选择器包含元素的元素，比如：div:has(p)表示哪些div包含了p元素<br>　　　　　　:not(selector): 查找与选择器不匹配的元素，比如： div:not(.logo) 表示不包含 class="logo" 元素的所有 div 列表<br>　　　　　　:contains(text): 查找包含给定文本的元素，搜索不区分大不写，比如： p:contains(jsoup)<br>　　　　　　:containsOwn(text): 查找直接包含给定文本的元素<br>　　　　　　:matches(regex): 查找哪些元素的文本匹配指定的正则表达式，比如：div:matches((?i)login)<br>　　　　　　:matchesOwn(regex): 查找自身包含文本匹配指定正则表达式的元素<br>　　　　　　注意：上述伪选择器索引是从0开始的，也就是</p>
+<h3>4.3、从元素抽取属性，本文和HTML</h3>
+<p>　　1）存在问题</p>
+<p>　　　　在解析获得一个Document实例对象，并查找到一些元素之后，你希望取得在这些元素中的数据。</p>
+<p>　　2）方法　　</p>
+<p>　　　　要取得一个<span style="color: #ff0000;">属性的值，可以使用Node.attr(String key) 方法</span><br>　　　　对于<span style="color: #ff0000;">一个元素中的文本，可以使用Element.text()方法</span><br>　　　　对于<span style="color: #ff0000;">要取得元素或属性中的HTML内容，可以使用Element.html(), 或 Node.outerHtml()方法</span></p>
+<div class="cnblogs_code"><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="Jsoup%EF%BC%88%E4%B8%80%EF%BC%89Jsoup%E8%AF%A6%E8%A7%A3%EF%BC%88%E5%AE%98%E6%96%B9%EF%BC%89%20-%20%E8%8B%A6%E6%B0%B4%E6%B6%A6%E5%96%89%20-%20%E5%8D%9A%E5%AE%A2%E5%9B%AD_files/copycode.gif" alt="复制代码"></a></span></div>
+<pre>　　String html = <span style="color: #800000;">"</span><span style="color: #800000;">&lt;p&gt;An &lt;a href='http://example.com/'&gt;&lt;b&gt;example&lt;/b&gt;&lt;/a&gt; link.&lt;/p&gt;</span><span style="color: #800000;">"</span><span style="color: #000000;">;
+　　Document doc </span>= Jsoup.parse(html);<span style="color: #008000;">//</span><span style="color: #008000;">解析HTML字符串返回一个Document实现</span>
+　　Element link = doc.<span style="color: #0000ff;">select</span>(<span style="color: #800000;">"</span><span style="color: #800000;">a</span><span style="color: #800000;">"</span>).first();<span style="color: #008000;">//</span><span style="color: #008000;">查找第一个a元素</span>
+<span style="color: #000000;">
+　　String text </span>= doc.body().text(); <span style="color: #008000;">//</span><span style="color: #008000;"> "An example link"</span><span style="color: #008000;">//</span><span style="color: #008000;">取得字符串中的文本</span>
+　　String linkHref = link.attr(<span style="color: #800000;">"</span><span style="color: #800000;">href</span><span style="color: #800000;">"</span>); <span style="color: #008000;">//</span><span style="color: #008000;"> "</span><span style="color: #008000; text-decoration: underline;">http://example.com/</span><span style="color: #008000;">"</span><span style="color: #008000;">//</span><span style="color: #008000;">取得链接地址</span>
+　　String linkText = link.text(); <span style="color: #008000;">//</span><span style="color: #008000;"> "example""</span><span style="color: #008000;">//</span><span style="color: #008000;">取得链接地址中的文本</span>
+<span style="color: #000000;">
+　　String linkOuterH </span>=<span style="color: #000000;"> link.outerHtml(); 
+ 　　   </span><span style="color: #008000;">//</span><span style="color: #008000;"> "&lt;a href="</span><span style="color: #008000; text-decoration: underline;">http://example.com</span><span style="color: #008000;">"&gt;&lt;b&gt;example&lt;/b&gt;&lt;/a&gt;"</span>
+　　String linkInnerH = link.html(); <span style="color: #008000;">//</span><span style="color: #008000;"> "&lt;b&gt;example&lt;/b&gt;"</span><span style="color: #008000;">//</span><span style="color: #008000;">取得链接内的html内容</span></pre>
+<div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="Jsoup%EF%BC%88%E4%B8%80%EF%BC%89Jsoup%E8%AF%A6%E8%A7%A3%EF%BC%88%E5%AE%98%E6%96%B9%EF%BC%89%20-%20%E8%8B%A6%E6%B0%B4%E6%B6%A6%E5%96%89%20-%20%E5%8D%9A%E5%AE%A2%E5%9B%AD_files/copycode.gif" alt="复制代码"></a></span></div></div>
+<p>　　3）说明　　</p>
+<p>　　　　上述方法是元素数据访问的核心办法。此外还其它一些方法可以使用：</p>
+<div class="cnblogs_Highlighter sh-gutter">
+<div><div id="highlighter_181797" class="syntaxhighlighter  csharp"><div class="toolbar"><span><a href="#" class="toolbar_item command_help help">?</a></span></div><table cellspacing="0" cellpadding="0" border="0"><tbody><tr><td class="gutter"><div class="line number1 index0 alt2">1</div><div class="line number2 index1 alt1">2</div><div class="line number3 index2 alt2">3</div></td><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="csharp plain">Element.id()</code></div><div class="line number2 index1 alt1"><code class="csharp plain">Element.tagName()</code></div><div class="line number3 index2 alt2"><code class="csharp plain">Element.className() and Element.hasClass(String className)</code></div></div></td></tr></tbody></table></div></div>
+</div>
+<p>　　　　这些访问器方法都有相应的setter方法来更改数据.</p>
+<h3>4.4、处理URLs</h3>
+<p>　　1）存在问题</p>
+<p>　　　　你有<span style="color: #ff0000;">一个包含相对URLs路径的HTML文档，需要将这些相对路径转换成绝对路径的URLs</span>。</p>
+<p>　　2）方法　　　　</p>
+<p>　　　　在你解析文档时确保有指定base URI，然后<br>　　　　使用<span style="color: #ff0000;"> abs: 属性前缀来取得包含base URI的绝对路径</span>。代码如下：</p>
+<div class="cnblogs_code">
+<pre>　　Document doc = Jsoup.connect(<span style="color: #800000;">"</span><span style="color: #800000;">http://www.open-open.com</span><span style="color: #800000;">"</span>).<span style="color: #0000ff;">get</span><span style="color: #000000;">();
+
+　　Element link </span>= doc.<span style="color: #0000ff;">select</span>(<span style="color: #800000;">"</span><span style="color: #800000;">a</span><span style="color: #800000;">"</span><span style="color: #000000;">).first();
+　　String relHref </span>= link.attr(<span style="color: #800000;">"</span><span style="color: #800000;">href</span><span style="color: #800000;">"</span>); <span style="color: #008000;">//</span><span style="color: #008000;"> == "/"</span>
+　　String absHref = link.attr(<span style="color: #800000;">"</span><span style="color: #800000;">abs:href</span><span style="color: #800000;">"</span>); <span style="color: #008000;">//</span><span style="color: #008000;"> "</span><span style="color: #008000; text-decoration: underline;">http://www.open-open.com/</span><span style="color: #008000;">"</span></pre>
+</div>
+<p>　　3）说明</p>
+<p>　　　　在HTML元素中，<span style="color: #ff0000;">URLs经常写成相对于文档位置的相对路径： &lt;a href="/download"&gt;...&lt;/a&gt;. </span></p>
+<p>　　　　当你使用 Node.attr(String key) 方法来取得a元素的href属性时，它将直接返回在HTML源码中指定定的值。</p>
+<p>　　　　假如你需要取得一个绝对路径，<span style="color: #ff0000;">需要在属性名前加 abs: 前缀。这样就可以返回包含根路径的URL地址attr("abs:href")</span></p>
+<p><span style="color: #ff0000;">　　　　因此，在解析HTML文档时，定义base URI非常重要。</span></p>
+<p>　　　　如果你不想使用abs: 前缀，还有<span style="color: #ff0000;">一个方法能够实现同样的功能 Node.absUrl(String key)。</span></p>
+<h3>4.5、实例程序：获取所有连链接</h3>
+<p>　　1）说明</p>
+<p>　　　　这个示例程序将展示如何从一个URL获得一个页面。然后提取页面中的所有链接、图片和其它辅助内容。并检查URLs和文本信息。</p>
+<p>　　2）运行下面程序需要执行一个URLs作为参数</p>
+<div class="cnblogs_code"><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="Jsoup%EF%BC%88%E4%B8%80%EF%BC%89Jsoup%E8%AF%A6%E8%A7%A3%EF%BC%88%E5%AE%98%E6%96%B9%EF%BC%89%20-%20%E8%8B%A6%E6%B0%B4%E6%B6%A6%E5%96%89%20-%20%E5%8D%9A%E5%AE%A2%E5%9B%AD_files/copycode.gif" alt="复制代码"></a></span></div>
+<pre><span style="color: #000000;">package org.jsoup.examples;
+
+import org.jsoup.Jsoup;
+import org.jsoup.helper.Validate;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.</span><span style="color: #0000ff;">select</span><span style="color: #000000;">.Elements;
+
+import java.io.IOException;
+
+</span><span style="color: #008000;">/*</span><span style="color: #008000;">*
+ * Example program to list links from a URL.
+ </span><span style="color: #008000;">*/</span>
+<span style="color: #0000ff;">public</span> <span style="color: #0000ff;">class</span><span style="color: #000000;"> ListLinks {
+    </span><span style="color: #0000ff;">public</span> <span style="color: #0000ff;">static</span> <span style="color: #0000ff;">void</span><span style="color: #000000;"> main(String[] args) throws IOException {
+        Validate.isTrue(args.length </span>== <span style="color: #800080;">1</span>, <span style="color: #800000;">"</span><span style="color: #800000;">usage: supply url to fetch</span><span style="color: #800000;">"</span><span style="color: #000000;">);
+        String url </span>= args[<span style="color: #800080;">0</span><span style="color: #000000;">];
+        print(</span><span style="color: #800000;">"</span><span style="color: #800000;">Fetching %s...</span><span style="color: #800000;">"</span><span style="color: #000000;">, url);
+
+        Document doc </span>= Jsoup.connect(url).<span style="color: #0000ff;">get</span><span style="color: #000000;">();
+        Elements links </span>= doc.<span style="color: #0000ff;">select</span>(<span style="color: #800000;">"</span><span style="color: #800000;">a[href]</span><span style="color: #800000;">"</span><span style="color: #000000;">);
+        Elements media </span>= doc.<span style="color: #0000ff;">select</span>(<span style="color: #800000;">"</span><span style="color: #800000;">[src]</span><span style="color: #800000;">"</span><span style="color: #000000;">);
+        Elements imports </span>= doc.<span style="color: #0000ff;">select</span>(<span style="color: #800000;">"</span><span style="color: #800000;">link[href]</span><span style="color: #800000;">"</span><span style="color: #000000;">);
+
+        print(</span><span style="color: #800000;">"</span><span style="color: #800000;">\nMedia: (%d)</span><span style="color: #800000;">"</span><span style="color: #000000;">, media.size());
+        </span><span style="color: #0000ff;">for</span><span style="color: #000000;"> (Element src : media) {
+            </span><span style="color: #0000ff;">if</span> (src.tagName().equals(<span style="color: #800000;">"</span><span style="color: #800000;">img</span><span style="color: #800000;">"</span><span style="color: #000000;">))
+                print(</span><span style="color: #800000;">"</span><span style="color: #800000;"> * %s: &lt;%s&gt; %sx%s (%s)</span><span style="color: #800000;">"</span><span style="color: #000000;">,
+                        src.tagName(), src.attr(</span><span style="color: #800000;">"</span><span style="color: #800000;">abs:src</span><span style="color: #800000;">"</span>), src.attr(<span style="color: #800000;">"</span><span style="color: #800000;">width</span><span style="color: #800000;">"</span>), src.attr(<span style="color: #800000;">"</span><span style="color: #800000;">height</span><span style="color: #800000;">"</span><span style="color: #000000;">),
+                        trim(src.attr(</span><span style="color: #800000;">"</span><span style="color: #800000;">alt</span><span style="color: #800000;">"</span>), <span style="color: #800080;">20</span><span style="color: #000000;">));
+            </span><span style="color: #0000ff;">else</span><span style="color: #000000;">
+                print(</span><span style="color: #800000;">"</span><span style="color: #800000;"> * %s: &lt;%s&gt;</span><span style="color: #800000;">"</span>, src.tagName(), src.attr(<span style="color: #800000;">"</span><span style="color: #800000;">abs:src</span><span style="color: #800000;">"</span><span style="color: #000000;">));
+        }
+
+        print(</span><span style="color: #800000;">"</span><span style="color: #800000;">\nImports: (%d)</span><span style="color: #800000;">"</span><span style="color: #000000;">, imports.size());
+        </span><span style="color: #0000ff;">for</span><span style="color: #000000;"> (Element link : imports) {
+            print(</span><span style="color: #800000;">"</span><span style="color: #800000;"> * %s &lt;%s&gt; (%s)</span><span style="color: #800000;">"</span>, link.tagName(),link.attr(<span style="color: #800000;">"</span><span style="color: #800000;">abs:href</span><span style="color: #800000;">"</span>), link.attr(<span style="color: #800000;">"</span><span style="color: #800000;">rel</span><span style="color: #800000;">"</span><span style="color: #000000;">));
+        }
+
+        print(</span><span style="color: #800000;">"</span><span style="color: #800000;">\nLinks: (%d)</span><span style="color: #800000;">"</span><span style="color: #000000;">, links.size());
+        </span><span style="color: #0000ff;">for</span><span style="color: #000000;"> (Element link : links) {
+            print(</span><span style="color: #800000;">"</span><span style="color: #800000;"> * a: &lt;%s&gt;  (%s)</span><span style="color: #800000;">"</span>, link.attr(<span style="color: #800000;">"</span><span style="color: #800000;">abs:href</span><span style="color: #800000;">"</span>), trim(link.text(), <span style="color: #800080;">35</span><span style="color: #000000;">));
+        }
+    }
+
+    </span><span style="color: #0000ff;">private</span> <span style="color: #0000ff;">static</span> <span style="color: #0000ff;">void</span><span style="color: #000000;"> print(String msg, Object... args) {
+        System.</span><span style="color: #0000ff;">out</span><span style="color: #000000;">.println(String.format(msg, args));
+    }
+
+    </span><span style="color: #0000ff;">private</span> <span style="color: #0000ff;">static</span> String trim(String s, <span style="color: #0000ff;">int</span><span style="color: #000000;"> width) {
+        </span><span style="color: #0000ff;">if</span> (s.length() &gt;<span style="color: #000000;"> width)
+            </span><span style="color: #0000ff;">return</span> s.substring(<span style="color: #800080;">0</span>, width-<span style="color: #800080;">1</span>) + <span style="color: #800000;">"</span><span style="color: #800000;">.</span><span style="color: #800000;">"</span><span style="color: #000000;">;
+        </span><span style="color: #0000ff;">else</span>
+            <span style="color: #0000ff;">return</span><span style="color: #000000;"> s;
+    }
+}</span></pre>
+<div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="Jsoup%EF%BC%88%E4%B8%80%EF%BC%89Jsoup%E8%AF%A6%E8%A7%A3%EF%BC%88%E5%AE%98%E6%96%B9%EF%BC%89%20-%20%E8%8B%A6%E6%B0%B4%E6%B6%A6%E5%96%89%20-%20%E5%8D%9A%E5%AE%A2%E5%9B%AD_files/copycode.gif" alt="复制代码"></a></span></div></div>
+<p>　　3）查看结果</p>
+<div class="cnblogs_code"><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="Jsoup%EF%BC%88%E4%B8%80%EF%BC%89Jsoup%E8%AF%A6%E8%A7%A3%EF%BC%88%E5%AE%98%E6%96%B9%EF%BC%89%20-%20%E8%8B%A6%E6%B0%B4%E6%B6%A6%E5%96%89%20-%20%E5%8D%9A%E5%AE%A2%E5%9B%AD_files/copycode.gif" alt="复制代码"></a></span></div>
+<pre>Fetching http:<span style="color: #008000;">//</span><span style="color: #008000;">news.ycombinator.com/...</span>
+<span style="color: #000000;">
+Media: (</span><span style="color: #800080;">38</span><span style="color: #000000;">)
+ </span>* img: &lt;http:<span style="color: #008000;">//</span><span style="color: #008000;">ycombinator.com/images/y18.gif&gt; 18x18 ()</span>
+ * img: &lt;http:<span style="color: #008000;">//</span><span style="color: #008000;">ycombinator.com/images/s.gif&gt; 10x1 ()</span>
+ * img: &lt;http:<span style="color: #008000;">//</span><span style="color: #008000;">ycombinator.com/images/grayarrow.gif&gt; x ()</span>
+ * img: &lt;http:<span style="color: #008000;">//</span><span style="color: #008000;">ycombinator.com/images/s.gif&gt; 0x10 ()</span>
+ * script: &lt;http:<span style="color: #008000;">//</span><span style="color: #008000;">www.co2stats.com/propres.php?s=1138&gt;</span>
+ * img: &lt;http:<span style="color: #008000;">//</span><span style="color: #008000;">ycombinator.com/images/s.gif&gt; 15x1 ()</span>
+ * img: &lt;http:<span style="color: #008000;">//</span><span style="color: #008000;">ycombinator.com/images/hnsearch.png&gt; x ()</span>
+ * img: &lt;http:<span style="color: #008000;">//</span><span style="color: #008000;">ycombinator.com/images/s.gif&gt; 25x1 ()</span>
+ * img: &lt;http:<span style="color: #008000;">//</span><span style="color: #008000;">mixpanel.com/site_media/images/mixpanel_partner_logo_borderless.gif&gt; x (Analytics by Mixpan.)</span>
+<span style="color: #000000;"> 
+Imports: (</span><span style="color: #800080;">2</span><span style="color: #000000;">)
+ </span>* link &lt;http:<span style="color: #008000;">//</span><span style="color: #008000;">ycombinator.com/news.css&gt; (stylesheet)</span>
+ * link &lt;http:<span style="color: #008000;">//</span><span style="color: #008000;">ycombinator.com/favicon.ico&gt; (shortcut icon)</span>
+<span style="color: #000000;"> 
+Links: (</span><span style="color: #800080;">141</span><span style="color: #000000;">)
+ </span>* a: &lt;http:<span style="color: #008000;">//</span><span style="color: #008000;">ycombinator.com&gt;  ()</span>
+ * a: &lt;http:<span style="color: #008000;">//</span><span style="color: #008000;">news.ycombinator.com/news&gt;  (Hacker News)</span>
+ * a: &lt;http:<span style="color: #008000;">//</span><span style="color: #008000;">news.ycombinator.com/newest&gt;  (new)</span>
+ * a: &lt;http:<span style="color: #008000;">//</span><span style="color: #008000;">news.ycombinator.com/newcomments&gt;  (comments)</span>
+ * a: &lt;http:<span style="color: #008000;">//</span><span style="color: #008000;">news.ycombinator.com/leaders&gt;  (leaders)</span>
+ * a: &lt;http:<span style="color: #008000;">//</span><span style="color: #008000;">news.ycombinator.com/jobs&gt;  (jobs)</span>
+ * a: &lt;http:<span style="color: #008000;">//</span><span style="color: #008000;">news.ycombinator.com/submit&gt;  (submit)</span>
+ * a: &lt;http:<span style="color: #008000;">//</span><span style="color: #008000;">news.ycombinator.com/x?fnid=JKhQjfU7gW&gt;  (login)</span>
+ * a: &lt;http:<span style="color: #008000;">//</span><span style="color: #008000;">news.ycombinator.com/vote?for=1094578&amp;dir=up&amp;whence=%6e%65%77%73&gt;  ()</span>
+ * a: &lt;http:<span style="color: #008000;">//</span><span style="color: #008000;">www.readwriteweb.com/archives/facebook_gets_faster_debuts_homegrown_php_compiler.php?utm_source=feedburner&amp;utm_medium=feed&amp;utm_campaign=Feed%3A+readwriteweb+%28ReadWriteWeb%29&amp;utm_content=Twitter&gt;  (Facebook speeds up PHP)</span>
+ * a: &lt;http:<span style="color: #008000;">//</span><span style="color: #008000;">news.ycombinator.com/user?id=mcxx&gt;  (mcxx)</span>
+ * a: &lt;http:<span style="color: #008000;">//</span><span style="color: #008000;">news.ycombinator.com/item?id=1094578&gt;  (9 comments)</span>
+ * a: &lt;http:<span style="color: #008000;">//</span><span style="color: #008000;">news.ycombinator.com/vote?for=1094649&amp;dir=up&amp;whence=%6e%65%77%73&gt;  ()</span>
+ * a: &lt;http:<span style="color: #008000;">//</span><span style="color: #008000;">groups.google.com/group/django-developers/msg/a65fbbc8effcd914&gt;  ("Tough. Django produces XHTML.")</span>
+ * a: &lt;http:<span style="color: #008000;">//</span><span style="color: #008000;">news.ycombinator.com/user?id=andybak&gt;  (andybak)</span>
+ * a: &lt;http:<span style="color: #008000;">//</span><span style="color: #008000;">news.ycombinator.com/item?id=1094649&gt;  (3 comments)</span>
+ * a: &lt;http:<span style="color: #008000;">//</span><span style="color: #008000;">news.ycombinator.com/vote?for=1093927&amp;dir=up&amp;whence=%6e%65%77%73&gt;  ()</span>
+ * a: &lt;http:<span style="color: #008000;">//</span><span style="color: #008000;">news.ycombinator.com/x?fnid=p2sdPLE7Ce&gt;  (More)</span>
+ * a: &lt;http:<span style="color: #008000;">//</span><span style="color: #008000;">news.ycombinator.com/lists&gt;  (Lists)</span>
+ * a: &lt;http:<span style="color: #008000;">//</span><span style="color: #008000;">news.ycombinator.com/rss&gt;  (RSS)</span>
+ * a: &lt;http:<span style="color: #008000;">//</span><span style="color: #008000;">ycombinator.com/bookmarklet.html&gt;  (Bookmarklet)</span>
+ * a: &lt;http:<span style="color: #008000;">//</span><span style="color: #008000;">ycombinator.com/newsguidelines.html&gt;  (Guidelines)</span>
+ * a: &lt;http:<span style="color: #008000;">//</span><span style="color: #008000;">ycombinator.com/newsfaq.html&gt;  (FAQ)</span>
+ * a: &lt;http:<span style="color: #008000;">//</span><span style="color: #008000;">ycombinator.com/newsnews.html&gt;  (News News)</span>
+ * a: &lt;http:<span style="color: #008000;">//</span><span style="color: #008000;">news.ycombinator.com/item?id=363&gt;  (Feature Requests)</span>
+ * a: &lt;http:<span style="color: #008000;">//</span><span style="color: #008000;">ycombinator.com&gt;  (Y Combinator)</span>
+ * a: &lt;http:<span style="color: #008000;">//</span><span style="color: #008000;">ycombinator.com/w2010.html&gt;  (Apply)</span>
+ * a: &lt;http:<span style="color: #008000;">//</span><span style="color: #008000;">ycombinator.com/lib.html&gt;  (Library)</span>
+ * a: &lt;http:<span style="color: #008000;">//</span><span style="color: #008000;">www.webmynd.com/html/hackernews.html&gt;  ()</span>
+ * a: &lt;http:<span style="color: #008000;">//</span><span style="color: #008000;">mixpanel.com/?from=yc&gt;  ()</span></pre>
+<div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="Jsoup%EF%BC%88%E4%B8%80%EF%BC%89Jsoup%E8%AF%A6%E8%A7%A3%EF%BC%88%E5%AE%98%E6%96%B9%EF%BC%89%20-%20%E8%8B%A6%E6%B0%B4%E6%B6%A6%E5%96%89%20-%20%E5%8D%9A%E5%AE%A2%E5%9B%AD_files/copycode.gif" alt="复制代码"></a></span></div></div>
+<h2>五、数据修改</h2>
+<h3>5.1、设置属性值</h3>
+<p>　　1）存在问题　　　</p>
+<p>　　　　在你解析一个Document之后可能想修改其中的某些属性值，然后再保存到磁盘或都输出到前台页面。</p>
+<p>　　2）方法　</p>
+<p>　　　　可以使用属性设置方法 Element.attr(String key, String value), 和 Elements.attr(String key, String value).</p>
+<p>　　　　假如<span style="color: #ff0000;">你需要修改一个元素的 class 属性，可以使用 Element.addClass(String className) 和 Element.removeClass(String className) 方法。</span></p>
+<p>　　　　Elements 提供了批量操作元素属性和class的方法，比如：要为div中的每一个a元素都添加一个 rel="nofollow" 可以使用如下方法：</p>
+<p>　　　　doc.select("div.comments a").attr("rel", "nofollow");</p>
+<p>　　3）说明</p>
+<p>　　　　与Element中的其它方法一样，attr 方法也是返回当 Element (或在使用选择器是返回 Elements 集合)。</p>
+<p>　　　　这样能够很方便使用方法连用的书写方式。比如：</p>
+<p>　　　　doc.select("div.masthead").attr("title", "jsoup").addClass("round-box");</p>
+<h3>5.2、设置一个元素的HTML内容</h3>
+<p>　　1）存在问题</p>
+<p>　　　　你需要一个元素中的HTML的内容</p>
+<p>　　2）方法</p>
+<p>　　　　可以使用Element中的HTML设置方法具体如下：</p>
+<div class="cnblogs_code"><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="Jsoup%EF%BC%88%E4%B8%80%EF%BC%89Jsoup%E8%AF%A6%E8%A7%A3%EF%BC%88%E5%AE%98%E6%96%B9%EF%BC%89%20-%20%E8%8B%A6%E6%B0%B4%E6%B6%A6%E5%96%89%20-%20%E5%8D%9A%E5%AE%A2%E5%9B%AD_files/copycode.gif" alt="复制代码"></a></span></div>
+<pre>Element div = doc.<span style="color: #0000ff;">select</span>(<span style="color: #800000;">"</span><span style="color: #800000;">div</span><span style="color: #800000;">"</span>).first(); <span style="color: #008000;">//</span><span style="color: #008000;"> &lt;div&gt;&lt;/div&gt;</span>
+div.html(<span style="color: #800000;">"</span><span style="color: #800000;">&lt;p&gt;lorem ipsum&lt;/p&gt;</span><span style="color: #800000;">"</span>); <span style="color: #008000;">//</span><span style="color: #008000;"> &lt;div&gt;&lt;p&gt;lorem ipsum&lt;/p&gt;&lt;/div&gt;</span>
+div.prepend(<span style="color: #800000;">"</span><span style="color: #800000;">&lt;p&gt;First&lt;/p&gt;</span><span style="color: #800000;">"</span>);<span style="color: #008000;">//</span><span style="color: #008000;">在div前添加html内容</span>
+div.append(<span style="color: #800000;">"</span><span style="color: #800000;">&lt;p&gt;Last&lt;/p&gt;</span><span style="color: #800000;">"</span>);<span style="color: #008000;">//</span><span style="color: #008000;">在div之后添加html内容
+</span><span style="color: #008000;">//</span><span style="color: #008000;"> 添完后的结果: &lt;div&gt;&lt;p&gt;First&lt;/p&gt;&lt;p&gt;lorem ipsum&lt;/p&gt;&lt;p&gt;Last&lt;/p&gt;&lt;/div&gt;</span>
+<span style="color: #000000;">
+Element span </span>= doc.<span style="color: #0000ff;">select</span>(<span style="color: #800000;">"</span><span style="color: #800000;">span</span><span style="color: #800000;">"</span>).first(); <span style="color: #008000;">//</span><span style="color: #008000;"> &lt;span&gt;One&lt;/span&gt;</span>
+span.wrap(<span style="color: #800000;">"</span><span style="color: #800000;">&lt;li&gt;&lt;a href='http://example.com/'&gt;&lt;/a&gt;&lt;/li&gt;</span><span style="color: #800000;">"</span><span style="color: #000000;">);
+</span><span style="color: #008000;">//</span><span style="color: #008000;"> 添完后的结果: &lt;li&gt;&lt;a href="</span><span style="color: #008000; text-decoration: underline;">http://example.com</span><span style="color: #008000;">"&gt;&lt;span&gt;One&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;</span></pre>
+<div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="Jsoup%EF%BC%88%E4%B8%80%EF%BC%89Jsoup%E8%AF%A6%E8%A7%A3%EF%BC%88%E5%AE%98%E6%96%B9%EF%BC%89%20-%20%E8%8B%A6%E6%B0%B4%E6%B6%A6%E5%96%89%20-%20%E5%8D%9A%E5%AE%A2%E5%9B%AD_files/copycode.gif" alt="复制代码"></a></span></div></div>
+<p>　　3）说明</p>
+<p>　　　　Element.html(String html) 这个方法<span style="color: #ff0000;">将先清除元素中的HTML内容，然后用传入的HTML代替</span>。<br>　　　　Element.prepend(String first) 和 Element.append(String last) 方法用于<span style="color: #ff0000;">在分别在元素内部HTML的前面和后面添加HTML内容</span><br>　　　　Element.wrap(String around) 对<span style="color: #ff0000;">元素包裹一个外部HTML内容。</span></p>
+<p>&nbsp;</p>
+
+
+
+
+</div></div><div id="MySignature"></div>
+<div class="clear"></div>
+<div id="blog_post_info_block">
+<div id="BlogPostCategory">分类: <a href="https://www.cnblogs.com/zhangyinhua/category/1131182.html" target="_blank">Jsoup</a></div>
+<div id="EntryTag">标签: <a href="https://www.cnblogs.com/zhangyinhua/tag/Jsoup%E8%AF%A6%E8%A7%A3%E7%B3%BB%E5%88%97/">Jsoup详解系列</a></div>
+<div id="blog_post_info"><div id="green_channel">
+        <a href="javascript:void(0);" id="green_channel_digg" onclick="DiggIt(8037599,cb_blogId,1);green_channel_success(this,'谢谢推荐！');">好文要顶</a>
+            <a id="green_channel_follow" onclick="follow('e9bdb417-3c54-e611-9fc1-ac853d9f53cc');" href="javascript:void(0);">关注我</a>
+    <a id="green_channel_favorite" onclick="AddToWz(cb_entryId);return false;" href="javascript:void(0);">收藏该文</a>
+    <a id="green_channel_weibo" href="javascript:void(0);" title="分享至新浪微博" onclick="ShareToTsina()"><img src="Jsoup%EF%BC%88%E4%B8%80%EF%BC%89Jsoup%E8%AF%A6%E8%A7%A3%EF%BC%88%E5%AE%98%E6%96%B9%EF%BC%89%20-%20%E8%8B%A6%E6%B0%B4%E6%B6%A6%E5%96%89%20-%20%E5%8D%9A%E5%AE%A2%E5%9B%AD_files/icon_weibo_24.png" alt=""></a>
+    <a id="green_channel_wechat" href="javascript:void(0);" title="分享至微信" onclick="shareOnWechat()"><img src="Jsoup%EF%BC%88%E4%B8%80%EF%BC%89Jsoup%E8%AF%A6%E8%A7%A3%EF%BC%88%E5%AE%98%E6%96%B9%EF%BC%89%20-%20%E8%8B%A6%E6%B0%B4%E6%B6%A6%E5%96%89%20-%20%E5%8D%9A%E5%AE%A2%E5%9B%AD_files/wechat.png" alt=""></a>
+</div>
+<div id="author_profile">
+    <div id="author_profile_info" class="author_profile_info">
+            <a href="http://home.cnblogs.com/u/zhangyinhua/" target="_blank"><img src="Jsoup%EF%BC%88%E4%B8%80%EF%BC%89Jsoup%E8%AF%A6%E8%A7%A3%EF%BC%88%E5%AE%98%E6%96%B9%EF%BC%89%20-%20%E8%8B%A6%E6%B0%B4%E6%B6%A6%E5%96%89%20-%20%E5%8D%9A%E5%AE%A2%E5%9B%AD_files/20170729235406.png" class="author_avatar" alt=""></a>
+        <div id="author_profile_detail" class="author_profile_info">
+            <a href="http://home.cnblogs.com/u/zhangyinhua/">苦水润喉</a><br>
+            <a href="http://home.cnblogs.com/u/zhangyinhua/followees">关注 - 32</a><br>
+            <a href="http://home.cnblogs.com/u/zhangyinhua/followers">粉丝 - 367</a>
+        </div>
+    </div>
+    <div class="clear"></div>
+    <div id="author_profile_honor"></div>
+    <div id="author_profile_follow">
+                <a href="javascript:void(0);" onclick="follow('e9bdb417-3c54-e611-9fc1-ac853d9f53cc');return false;">+加关注</a>
+    </div>
+</div>
+<div id="div_digg">
+    <div class="diggit" onclick="votePost(8037599,'Digg')">
+        <span class="diggnum" id="digg_count">2</span>
+    </div>
+    <div class="buryit" onclick="votePost(8037599,'Bury')">
+        <span class="burynum" id="bury_count">0</span>
+    </div>
+    <div class="clear"></div>
+    <div class="diggword" id="digg_tips">
+    </div>
+</div>
+<script type="text/javascript">
+    currentDiggType = 0;
+</script></div>
+<div class="clear"></div>
+<div id="post_next_prev"><a href="https://www.cnblogs.com/zhangyinhua/p/8034431.html" class="p_n_p_prefix">« </a> 上一篇：<a href="https://www.cnblogs.com/zhangyinhua/p/8034431.html" title="发布于2017-12-13 18:51">MongoDB（一）环境搭建与初始配置</a><br><a href="https://www.cnblogs.com/zhangyinhua/p/8038377.html" class="p_n_p_prefix">» </a> 下一篇：<a href="https://www.cnblogs.com/zhangyinhua/p/8038377.html" title="发布于2017-12-14 16:23">HttpClient（一）HttpClient抓取网页基本信息</a><br></div>
+</div>
+
+
+		</div>
+		<div class="postDesc">posted @ <span id="post-date">2017-12-14 14:39</span> <a href="https://www.cnblogs.com/zhangyinhua/">苦水润喉</a> 阅读(<span id="post_view_count">17827</span>) 评论(<span id="post_comment_count">0</span>)  <a href="https://i.cnblogs.com/EditPosts.aspx?postid=8037599" rel="nofollow">编辑</a> <a href="#" onclick="AddToWz(8037599);return false;">收藏</a></div>
+	</div>
+	<script type="text/javascript">var allowComments=true,cb_blogId=320169,cb_entryId=8037599,cb_blogApp=currentBlogApp,cb_blogUserGuid='e9bdb417-3c54-e611-9fc1-ac853d9f53cc',cb_entryCreatedDate='2017/12/14 14:39:00';loadViewCount(cb_entryId);var cb_postType=1;</script>
+	
+</div><!--end: topics 文章、评论容器-->
+</div><a name="!comments"></a><div id="blog-comments-placeholder"></div><script type="text/javascript">var commentManager = new blogCommentManager();commentManager.renderComments(0);</script>
+<div id="comment_form" class="commentform">
+<a name="commentform"></a>
+<div id="divCommentShow"></div>
+<div id="comment_nav"><span id="span_refresh_tips"></span><a href="javascript:void(0);" onclick="return RefreshCommentList();" id="lnk_RefreshComments" runat="server" clientidmode="Static">刷新评论</a><a href="#" onclick="return RefreshPage();">刷新页面</a><a href="#top">返回顶部</a></div>
+<div id="comment_form_container"><div class="login_tips">注册用户登录后才能发表评论，请 <a rel="nofollow" href="javascript:void(0);" class="underline" onclick="return login('commentform');">登录</a> 或 <a rel="nofollow" href="javascript:void(0);" class="underline" onclick="return register();">注册</a>，<a href="http://www.cnblogs.com/">访问</a>网站首页。</div></div>
+<div class="ad_text_commentbox" id="ad_text_under_commentbox"></div>
+<div id="ad_t2"><a href="http://www.ucancode.com/index.htm" target="_blank">【推荐】超50万VC++源码: 大型组态工控、电力仿真CAD与GIS源码库！</a><br><a href="http://clickc.admaster.com.cn/c/a113612,b3081535,c1705,i0,m101,8a1,8b3,h" target="_blank" onclick="ga('send', 'event', 'Link', 'click', 'T2-EH')">【活动】华为云12.12会员节全场1折起 满额送Mate20</a><br><a href="http://clickc.admaster.com.cn/c/a116493,b2949399,c1705,i0,m101,8a1,8b3,h" target="_blank" onclick="ga('send', 'event', 'Link', 'click', 'T2-会员节')">【活动】华为云会员节云服务特惠1折起</a><br><a href="https://cloud.tencent.com/developer/conf/2018-beijing?fromSource=gwzcw.1768694.1768694.1768694" target="_blank" onclick="ga('send', 'event', 'Link', 'click', 'T2-腾讯云')">【活动】腾讯云+社区开发者大会12月15日首都北京盛大起航！</a><br></div>
+<div id="opt_under_post"></div>
+<div id="cnblogs_c1" class="c_ad_block"><a href="https://cloud.tencent.com/act/special/amd?fromSource=gwzcw.1351353.1351353.1351353" target="_blank"><img src="Jsoup%EF%BC%88%E4%B8%80%EF%BC%89Jsoup%E8%AF%A6%E8%A7%A3%EF%BC%88%E5%AE%98%E6%96%B9%EF%BC%89%20-%20%E8%8B%A6%E6%B0%B4%E6%B6%A6%E5%96%89%20-%20%E5%8D%9A%E5%AE%A2%E5%9B%AD_files/24442-20181129113406214-695115565.jpg" alt="腾讯云1129" onclick="ga('send', 'event', 'Link', 'click', 'C1');" width="300" height="250"></a></div>
+<div id="under_post_news"><div class="itnews c_ad_block"><b>相关博文：</b><br>·  <a href="https://www.cnblogs.com/panda2/p/7245317.html" target="_blank" onclick="clickRecomItmem(7245317,'kkm7ffXV8DhJ8rWAnn6U+GptxuY414x2laYnvgviJybItwiPNLmx4Wt1QjU4h6XaKBvZJUikZapRUs+kucBeN7CjWgePHPmujHo/hYWDJP+MehnTO4fLILTwY7RVA57t+SSa1PqCVIj9/epBRK6/')">Jsoup教程jsoup开发指南,jsoup中文使用手册,jsoup中文文档</a><br>·  <a href="https://www.cnblogs.com/yifenghong/archive/2011/12/20/2295026.html" target="_blank" onclick="clickRecomItmem(2295026,'a8FgiYtGZL+qi5XSvupbgVbeB6eJZ8y/NtUSbhFFefOPMDbhrnxGHzOyr6JnqwVnkS6KB+hk3xWXfNf25/fvm1af2AWbArphc9yvbZEz8l7j2ymQCMEnQJvKvpF08/TE4FHrjobXgmh3Ns+i7O3A')">HTML解析器 jsoup　刚刚接触这个东西</a><br>·  <a href="https://www.cnblogs.com/linchuxin/archive/2012/03/20/2408264.html" target="_blank" onclick="clickRecomItmem(2408264,'UYYV/FTk2w+XnqEiGzvSipPFV82zEJC9FYXfLPr0Z+QX0lrEwpb8TujFS1oVBo+lDelqvbfZ+C7/mbGqQ5ypqkM3Bi7yA+15XBa00anfDh4c8KhmBTUsGXQjihicSwJUwHlzQn41wtrwizCRShie')">jsoup学习笔记</a><br>·  <a href="https://www.cnblogs.com/vianzhang/p/7800704.html" target="_blank" onclick="clickRecomItmem(7800704,'CvxZj6R7MsOQNwu4GyWR00MPjTWUhOuTm1z0ziSMqlQFLTzC+2PP6hhmz43+MOx2fQEdQVvsDVS1mhos7HmmmWGKhj77IZu5uq4ucLr/67SbsYqOmM6pwuUgpR3b5zL7XquWjJ7yPAbLS9m10YCP')">Jsoup学习总结</a><br>·  <a href="https://www.cnblogs.com/XJJD/p/7070793.html" target="_blank" onclick="clickRecomItmem(7070793,'F1hgXuL8HBvQwc9/AZH9jtYpqI6JeopEw64invIo7ls7IFijM8D/DsJfKo3bjVG12Mb7pJgRo8I8vAb+Dtm1XdHm/YrxnIk8TFotrSaEjFBWaRelkaCqEgJsP/j7RUJcHdYqJl25jxNZmP/VF61/')">Jsoup爬虫解析</a><br></div></div>
+<script async="async" src="Jsoup%EF%BC%88%E4%B8%80%EF%BC%89Jsoup%E8%AF%A6%E8%A7%A3%EF%BC%88%E5%AE%98%E6%96%B9%EF%BC%89%20-%20%E8%8B%A6%E6%B0%B4%E6%B6%A6%E5%96%89%20-%20%E5%8D%9A%E5%AE%A2%E5%9B%AD_files/gpt.js"></script>
+<script>
+  var googletag = googletag || {};
+  googletag.cmd = googletag.cmd || [];
+</script>
+
+<script>
+  googletag.cmd.push(function() {
+    googletag.defineSlot('/1090369/C2', [468, 60], 'div-gpt-ad-1539008685004-0').addService(googletag.pubads());
+    googletag.pubads().enableSingleRequest();
+    googletag.enableServices();
+  });
+</script>
+<div id="cnblogs_c2" class="c_ad_block" style="">
+    <div id="div-gpt-ad-1539008685004-0" style="height:60px; width:468px;" data-google-query-id="CMi1_fu_md8CFVGTvQodeJcHyw">
+    
+    <div id="google_ads_iframe_/1090369/C2_0__container__" style="border: 0pt none;"><iframe id="google_ads_iframe_/1090369/C2_0" title="3rd party ad content" name="google_ads_iframe_/1090369/C2_0" scrolling="no" marginwidth="0" marginheight="0" style="border: 0px none; vertical-align: bottom;" srcdoc="" data-google-container-id="1" data-load-complete="true" width="468" height="60" frameborder="0"></iframe></div></div>
+</div>
+<div id="under_post_kb"><div class="itnews c_ad_block"><b>最新新闻</b>：<br> ·  <a href="https://news.cnblogs.com/n/614656/" target="_blank">埃隆·马斯克：我只用这一把刀切割世界</a><br> ·  <a href="https://news.cnblogs.com/n/614668/" target="_blank">你以为自己在填验证码，其实你是在给Google义务劳动</a><br> ·  <a href="https://news.cnblogs.com/n/614667/" target="_blank">继HTC之后 三星注册新商标或研发区块链智能手机</a><br> ·  <a href="https://news.cnblogs.com/n/614666/" target="_blank">抖音加速商业化：购物车功能开放 粉丝8000以上可申请</a><br> ·  <a href="https://news.cnblogs.com/n/614665/" target="_blank">摩拜回应违反欧洲数据法：尚未接到问询 将积极配合</a><br>» <a href="http://news.cnblogs.com/" title="IT新闻" target="_blank">更多新闻...</a></div></div>
+<div id="HistoryToday" class="c_ad_block"></div>
+<script type="text/javascript">
+    fixPostBody();
+    setTimeout(function () { incrementViewCount(cb_entryId); }, 50);
+    deliverAdT2();
+    deliverAdC1();
+    deliverAdC2();    
+    loadNewsAndKb();
+    loadBlogSignature();
+    LoadPostInfoBlock(cb_blogId, cb_entryId, cb_blogApp, cb_blogUserGuid);
+    GetPrevNextPost(cb_entryId, cb_blogId, cb_entryCreatedDate, cb_postType);
+    loadOptUnderPost();
+    GetHistoryToday(cb_blogId, cb_blogApp, cb_entryCreatedDate);   
+</script>
+</div>
+
+
+	</div><!--end: forFlow -->
+	</div><!--end: mainContent 主体内容容器-->
+
+	<div id="sideBar">
+		<div id="sideBarMain">
+			
+<!--done-->
+<div class="newsItem">
+<h3 class="catListTitle">公告</h3>
+	<div id="blog-news"><div id="profile_block">昵称：<a href="https://home.cnblogs.com/u/zhangyinhua/">苦水润喉</a><br>园龄：<a href="https://home.cnblogs.com/u/zhangyinhua/" title="入园时间：2016-07-28">2年4个月</a><br>粉丝：<a href="https://home.cnblogs.com/u/zhangyinhua/followers/">367</a><br>关注：<a href="https://home.cnblogs.com/u/zhangyinhua/followees/">32</a><div id="p_b_follow"><a href="javascript:void(0);" onclick="follow('e9bdb417-3c54-e611-9fc1-ac853d9f53cc')">+加关注</a></div><script>getFollowStatus('e9bdb417-3c54-e611-9fc1-ac853d9f53cc')</script></div></div><script type="text/javascript">loadBlogNews();</script>
+</div>
+
+			<div id="blog-calendar" style=""><table id="blogCalendar" class="Cal" title="Calendar" cellspacing="0" cellpadding="0">
+	<tbody><tr><td colspan="7"><table class="CalTitle" cellspacing="0">
+		<tbody><tr><td class="CalNextPrev"><a href="javascript:void(0);" onclick="loadBlogCalendar('2018/11/01');return false;">&lt;</a></td><td align="center">2018年12月</td><td class="CalNextPrev" align="right"><a href="javascript:void(0);" onclick="loadBlogCalendar('2019/01/01');return false;">&gt;</a></td></tr>
+	</tbody></table></td></tr><tr><th class="CalDayHeader" abbr="日" scope="col" align="center">日</th><th class="CalDayHeader" abbr="一" scope="col" align="center">一</th><th class="CalDayHeader" abbr="二" scope="col" align="center">二</th><th class="CalDayHeader" abbr="三" scope="col" align="center">三</th><th class="CalDayHeader" abbr="四" scope="col" align="center">四</th><th class="CalDayHeader" abbr="五" scope="col" align="center">五</th><th class="CalDayHeader" abbr="六" scope="col" align="center">六</th></tr><tr><td class="CalOtherMonthDay" align="center">25</td><td class="CalOtherMonthDay" align="center">26</td><td class="CalOtherMonthDay" align="center">27</td><td class="CalOtherMonthDay" align="center">28</td><td class="CalOtherMonthDay" align="center">29</td><td class="CalOtherMonthDay" align="center">30</td><td class="CalWeekendDay" align="center">1</td></tr><tr><td class="CalWeekendDay" align="center">2</td><td align="center">3</td><td align="center">4</td><td align="center">5</td><td align="center">6</td><td align="center">7</td><td class="CalWeekendDay" align="center">8</td></tr><tr><td class="CalWeekendDay" align="center">9</td><td align="center">10</td><td align="center">11</td><td class="CalTodayDay" align="center">12</td><td align="center">13</td><td align="center">14</td><td class="CalWeekendDay" align="center">15</td></tr><tr><td class="CalWeekendDay" align="center">16</td><td align="center">17</td><td align="center">18</td><td align="center">19</td><td align="center">20</td><td align="center">21</td><td class="CalWeekendDay" align="center">22</td></tr><tr><td class="CalWeekendDay" align="center">23</td><td align="center">24</td><td align="center">25</td><td align="center">26</td><td align="center">27</td><td align="center">28</td><td class="CalWeekendDay" align="center">29</td></tr><tr><td class="CalWeekendDay" align="center">30</td><td align="center">31</td><td class="CalOtherMonthDay" align="center">1</td><td class="CalOtherMonthDay" align="center">2</td><td class="CalOtherMonthDay" align="center">3</td><td class="CalOtherMonthDay" align="center">4</td><td class="CalOtherMonthDay" align="center">5</td></tr>
+</tbody></table></div><script type="text/javascript">loadBlogDefaultCalendar();</script>
+			
+			<div id="leftcontentcontainer">
+				<div id="blog-sidecolumn"><div id="sidebar_search" class="sidebar-block">
+<div id="sidebar_search" class="mySearch">
+<h3 class="catListTitle">搜索</h3>
+<div id="sidebar_search_box">
+<div id="widget_my_zzk" class="div_my_zzk"><input type="text" id="q" onkeydown="return zzk_go_enter(event);" class="input_my_zzk">&nbsp;<input onclick="zzk_go()" type="button" value="找找看" id="btnZzk" class="btn_my_zzk"></div>
+<div id="widget_my_google" class="div_my_zzk"><input type="text" name="google_q" id="google_q" onkeydown="return google_go_enter(event)" class="input_my_zzk">&nbsp;<input onclick="google_go()" type="button" value="谷歌搜索" class="btn_my_zzk"></div>
+</div>
+</div>
+
+</div><div id="sidebar_shortcut" class="sidebar-block">
+<div class="catListLink">
+<h3 class="catListTitle">常用链接</h3>
+<ul>
+<li><a href="https://www.cnblogs.com/zhangyinhua/p/" title="我的博客的随笔列表">我的随笔</a></li><li><a href="https://www.cnblogs.com/zhangyinhua/MyComments.html" title="我发表过的评论列表">我的评论</a></li><li><a href="https://www.cnblogs.com/zhangyinhua/OtherPosts.html" title="我评论过的随笔列表">我的参与</a></li><li><a href="https://www.cnblogs.com/zhangyinhua/RecentComments.html" title="我的博客的评论列表">最新评论</a></li><li><a href="https://www.cnblogs.com/zhangyinhua/tag/" title="我的博客的标签列表">我的标签</a></li>
+</ul>
+<div id="itemListLin_con" style="display:none;">
+<ul>
+
+</ul>
+</div>
+</div></div><div id="sidebar_toptags" class="sidebar-block">
+<div class="catListTag">
+<h3 class="catListTitle">我的标签</h3>
+<ul>
+<li><a href="https://www.cnblogs.com/zhangyinhua/tag/MySQL/">MySQL</a>(17)</li><li><a href="https://www.cnblogs.com/zhangyinhua/tag/%E8%B5%B7%E8%88%AAHadoop/">起航Hadoop</a>(17)</li><li><a href="https://www.cnblogs.com/zhangyinhua/tag/java/">java</a>(15)</li><li><a href="https://www.cnblogs.com/zhangyinhua/tag/linux/">linux</a>(15)</li><li><a href="https://www.cnblogs.com/zhangyinhua/tag/%E7%BB%86%E8%AF%B4JavaWeb/">细说JavaWeb</a>(12)</li><li><a href="https://www.cnblogs.com/zhangyinhua/tag/TCP%2FIP%E8%AF%A6%E8%A7%A3/">TCP/IP详解</a>(10)</li><li><a href="https://www.cnblogs.com/zhangyinhua/tag/SpringBoot%E7%B3%BB%E5%88%97%E8%AF%A6%E8%A7%A3/">SpringBoot系列详解</a>(7)</li><li><a href="https://www.cnblogs.com/zhangyinhua/tag/corejava%E9%9B%86%E5%90%88%E8%AE%BA/">corejava集合论</a>(7)</li><li><a href="https://www.cnblogs.com/zhangyinhua/tag/Maven%E8%AF%A6%E8%A7%A3/">Maven详解</a>(6)</li><li><a href="https://www.cnblogs.com/zhangyinhua/tag/struts2%E8%AF%A6%E8%A7%A3%E7%B3%BB%E5%88%97/">struts2详解系列</a>(6)</li><li><a href="https://www.cnblogs.com/zhangyinhua/tag/">更多</a></li>
+</ul>
+</div></div><div id="sidebar_categories">
+<div id="sidebar_postcategory" class="catListPostCategory sidebar-block">
+<h3 class="catListTitle">随笔分类<span style="font-size:11px;font-weight:normal">(166)</span></h3>
+
+<ul>
+
+<li><a id="CatList_LinkList_0_Link_0" href="https://www.cnblogs.com/zhangyinhua/category/1045169.html">Algorithm</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_1" href="https://www.cnblogs.com/zhangyinhua/category/1045168.html">DataStructure</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_2" href="https://www.cnblogs.com/zhangyinhua/category/1092163.html">DevelopProblem(2)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_3" href="https://www.cnblogs.com/zhangyinhua/category/1070221.html">DevelopTools(5)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_4" href="https://www.cnblogs.com/zhangyinhua/category/1110368.html">Flume(1)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_5" href="https://www.cnblogs.com/zhangyinhua/category/1136324.html">Git&amp;GitHub&amp;GitLab(3)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_6" href="https://www.cnblogs.com/zhangyinhua/category/1093575.html">Hadoop(17)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_7" href="https://www.cnblogs.com/zhangyinhua/category/1116175.html">HTML&amp;CSS</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_8" href="https://www.cnblogs.com/zhangyinhua/category/1131260.html">HttpClient(2)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_9" href="https://www.cnblogs.com/zhangyinhua/category/1045512.html">InterviewQuestions(2)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_10" href="https://www.cnblogs.com/zhangyinhua/category/1104241.html">Java8NewFeature</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_11" href="https://www.cnblogs.com/zhangyinhua/category/1098228.html">JavaCollectionSourceCodeAnalysis(4)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_12" href="https://www.cnblogs.com/zhangyinhua/category/1098932.html">JavaCommonClass(5)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_13" href="https://www.cnblogs.com/zhangyinhua/category/1048998.html">JavaMultiThreading(2)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_14" href="https://www.cnblogs.com/zhangyinhua/category/1278629.html">JavaScript(3)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_15" href="https://www.cnblogs.com/zhangyinhua/category/917549.html">JavaSE(19)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_16" href="https://www.cnblogs.com/zhangyinhua/category/959115.html">JavaWeb(14)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_17" href="https://www.cnblogs.com/zhangyinhua/category/1079183.html">JDBC(3)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_18" href="https://www.cnblogs.com/zhangyinhua/category/1131182.html">Jsoup(1)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_19" href="https://www.cnblogs.com/zhangyinhua/category/1073118.html">KVM(3)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_20" href="https://www.cnblogs.com/zhangyinhua/category/1077649.html">Maven(6)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_21" href="https://www.cnblogs.com/zhangyinhua/category/1130706.html">MongoDB(1)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_22" href="https://www.cnblogs.com/zhangyinhua/category/1086424.html">mybatis(2)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_23" href="https://www.cnblogs.com/zhangyinhua/category/960639.html">mysql(18)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_24" href="https://www.cnblogs.com/zhangyinhua/category/1082209.html">MySQL Cluster(4)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_25" href="https://www.cnblogs.com/zhangyinhua/category/1091095.html">OOAD(4)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_26" href="https://www.cnblogs.com/zhangyinhua/category/1087558.html">OpenSourceProject(1)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_27" href="https://www.cnblogs.com/zhangyinhua/category/917547.html">Problems  in Java learning(1)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_28" href="https://www.cnblogs.com/zhangyinhua/category/1116098.html">Python</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_29" href="https://www.cnblogs.com/zhangyinhua/category/1122347.html">Spring(1)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_30" href="https://www.cnblogs.com/zhangyinhua/category/1152054.html">SpringBoot(6)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_31" href="https://www.cnblogs.com/zhangyinhua/category/1251613.html">SpringCloud(1)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_32" href="https://www.cnblogs.com/zhangyinhua/category/1107688.html">struts2(6)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_33" href="https://www.cnblogs.com/zhangyinhua/category/1086895.html">TCP/IP(10)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_34" href="https://www.cnblogs.com/zhangyinhua/category/1045166.html">Unix&amp;Linux(15)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_35" href="https://www.cnblogs.com/zhangyinhua/category/1279741.html">Vue.js(2)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_36" href="https://www.cnblogs.com/zhangyinhua/category/1084338.html">XML(2)</a> </li>
+
+</ul>
+
+</div>
+
+</div><div id="sidebar_scorerank" class="sidebar-block">
+<div class="catListBlogRank">
+<h3 class="catListTitle">积分与排名</h3>
+<ul>
+	<li class="liScore">
+		积分 -	132336
+	</li>
+	<li class="liRank">
+		排名 -	2810
+	</li>
+</ul>
+</div>
+
+
+</div><div id="sidebar_recentcomments" class="sidebar-block"><div id="recent_comments_wrap">
+<div class="catListComment">
+<h3 class="catListTitle">最新评论</h3>
+
+	<div id="RecentCommentsBlock"><ul>
+        <li class="recent_comment_title"><a href="https://www.cnblogs.com/zhangyinhua/p/7687377.html#4133384">1. Re:Java集合源码分析（一）ArrayList</a></li>
+        <li class="recent_comment_body">是不是根本就没有动态数组，动态数组其实也是新数组，不是原来的数组变长了是吗，而是返回另一个更长的数组</li>
+        <li class="recent_comment_author">--渣渣宏</li>
+        <li class="recent_comment_title"><a href="https://www.cnblogs.com/zhangyinhua/p/7689974.html#4124106">2. Re:Java常用类（二）String类详解</a></li>
+        <li class="recent_comment_body">@guardianboequals比较的是内容 而非地址...</li>
+        <li class="recent_comment_author">--月落乌啼oez</li>
+        <li class="recent_comment_title"><a href="https://www.cnblogs.com/zhangyinhua/p/7689974.html#4119130">3. Re:Java常用类（二）String类详解</a></li>
+        <li class="recent_comment_body">朋友你举的例子里，a.equals（c），一个在池中一个在堆中返回的应该是false吧。没在电脑旁边不方便试。</li>
+        <li class="recent_comment_author">--guardianbo</li>
+        <li class="recent_comment_title"><a href="https://www.cnblogs.com/zhangyinhua/p/7678704.html#4092749">4. Re:Hadoop（五）搭建Hadoop客户端与Java访问HDFS集群</a></li>
+        <li class="recent_comment_body">谢谢分享</li>
+        <li class="recent_comment_author">--爱历史的ITMan</li>
+        <li class="recent_comment_title"><a href="https://www.cnblogs.com/zhangyinhua/p/7629099.html#4077141">5. Re:JavaWeb（一）Servlet中的ServletConfig与ServletContext</a></li>
+        <li class="recent_comment_body"><b>mark</b></li>
+        <li class="recent_comment_author">--idemor</li>
+</ul>
+</div>
+</div>
+</div></div><div id="sidebar_topviewedposts" class="sidebar-block"><div id="topview_posts_wrap">
+<div class="catListView">
+<h3 class="catListTitle">阅读排行榜</h3>
+	<div id="TopViewPostsBlock"><ul><li><a href="https://www.cnblogs.com/zhangyinhua/p/7803486.html">1. Flume（一）Flume原理解析(33155)</a></li><li><a href="https://www.cnblogs.com/zhangyinhua/p/8037599.html">2. Jsoup（一）Jsoup详解（官方）(17827)</a></li><li><a href="https://www.cnblogs.com/zhangyinhua/p/7520823.html">3. IntelliJ IDEA使用（一）基本设置与类、方法模板设置(17200)</a></li><li><a href="https://www.cnblogs.com/zhangyinhua/p/7678704.html">4. Hadoop（五）搭建Hadoop客户端与Java访问HDFS集群(15399)</a></li><li><a href="https://www.cnblogs.com/zhangyinhua/p/7647686.html">5. Hadoop（二）搭建伪分布式集群(12014)</a></li></ul></div>
+</div>
+</div></div><div id="sidebar_topcommentedposts" class="sidebar-block"><div id="topfeedback_posts_wrap">
+<div class="catListFeedback">
+<h3 class="catListTitle">评论排行榜</h3>
+	<div id="TopFeedbackPostsBlock"><ul><li><a href="https://www.cnblogs.com/zhangyinhua/p/7620964.html">1. MySQL优化原理(7)</a></li><li><a href="https://www.cnblogs.com/zhangyinhua/p/7607633.html">2. TCP/IP（二）物理层详解(7)</a></li><li><a href="https://www.cnblogs.com/zhangyinhua/p/7598603.html">3. TCP/IP（一）之开启计算机网络之路(6)</a></li><li><a href="https://www.cnblogs.com/zhangyinhua/p/7483383.html">4. JavaSE（八）之集合概述(6)</a></li><li><a href="https://www.cnblogs.com/zhangyinhua/p/7463064.html">5. linux(一)之linux简介(5)</a></li></ul></div>
+</div>
+</div></div><div id="sidebar_topdiggedposts" class="sidebar-block"><div id="topdigg_posts_wrap">
+<div class="catListView">
+<h3 class="catListTitle">推荐排行榜</h3>
+<div id="TopDiggPostsBlock"><ul><li><a href="https://www.cnblogs.com/zhangyinhua/p/7803486.html">1. Flume（一）Flume原理解析(17)</a></li><li><a href="https://www.cnblogs.com/zhangyinhua/p/7689974.html">2. Java常用类（二）String类详解(10)</a></li><li><a href="https://www.cnblogs.com/zhangyinhua/p/7607633.html">3. TCP/IP（二）物理层详解(8)</a></li><li><a href="https://www.cnblogs.com/zhangyinhua/p/7647686.html">4. Hadoop（二）搭建伪分布式集群(8)</a></li><li><a href="https://www.cnblogs.com/zhangyinhua/p/7620964.html">5. MySQL优化原理(8)</a></li></ul></div>
+</div></div></div></div><script type="text/javascript">loadBlogSideColumn();</script>
+			</div>
+			
+		</div><!--end: sideBarMain -->
+	</div><!--end: sideBar 侧边栏容器 -->
+	<div class="clear"></div>
+	</div><!--end: main -->
+	<div class="clear"></div>
+	<div id="footer">
+		
+<!--done-->
+Copyright ©2018 苦水润喉
+	</div><!--end: footer -->
+</div><!--end: home 自定义的最大容器 -->
+<!--PageEndHtml Block Begin-->
+<script language="javascript" type="text/javascript">
+//生成目录索引列表
+function GenerateContentList()
+{
+    var jquery_h1_list = $('#cnblogs_post_body h1');
+    if (jquery_h1_list.length == 0) { return; }
+    if ($('#cnblogs_post_body').length == 0) { return; }
+
+    var content = '<a name="_labelTop"></a>';
+    content    += '<div id="navCategory">';
+    content    += '<p style="font-size:18px"><b>阅读目录(Content)</b></p>';
+    // 一级目录 start
+    content += '<ul class="first_class_ul">';
+
+    for (var i = 0; i < jquery_h1_list.length; i++)
+    {
+        var go_to_top = '<div style="text-align: right"><a href="#_labelTop">回到顶部(go to top)</a><a name="_label' + i + '"></a></div>';
+        $(jquery_h1_list[i]).before(go_to_top);
+
+        // 一级目录的一条
+        var li_content = '<li><a href="#_label' + i + '">' + $(jquery_h1_list[i]).text() + '</a></li>';
+
+        var nextH1Index = i + 1;
+        if (nextH1Index == jquery_h1_list.length) { nextH1Index = 0; }
+        var jquery_h2_list = $(jquery_h1_list[i]).nextUntil(jquery_h1_list[nextH1Index], "h2");
+        // 二级目录 start
+        if (jquery_h2_list.length > 0)
+        {
+            //li_content +='<ul style="list-style-type:none; text-align: left; margin:2px 2px;">';
+            li_content += '<ul class="second_class_ul">';
+        }
+        for (var j = 0; j < jquery_h2_list.length; j++)
+        {
+            var go_to_top2 = '<div style="text-align: right"><a name="_lab2_'+ i + '_' + j + '"></a></div>';
+            $(jquery_h2_list[j]).before(go_to_top2);
+            // 二级目录的一条
+            li_content +='<li><a href="#_lab2_'+ i +'_' + j + '">' + $(jquery_h2_list[j]).text() + '</a></li>';
+
+            var nextH2Index = j + 1;
+            var next;
+            if (nextH2Index == jquery_h2_list.length) 
+            {
+                if (i + 1 == jquery_h1_list.length)
+                {
+                    next = jquery_h1_list[0];
+                }
+                else
+                {
+                    next = jquery_h1_list[i + 1];
+                }
+            }
+            else
+            {
+                next = jquery_h2_list[nextH2Index];
+            }
+            var jquery_h3_list = $(jquery_h2_list[j]).nextUntil(next, "h3");
+            // 三级目录 start
+            if (jquery_h3_list.length > 0)
+            {
+                li_content += '<ul class="third_class_ul">';
+            }
+            
+            for (var k = 0; k < jquery_h3_list.length; k++)
+            {
+                var go_to_third_Content = '<div style="text-align: right"><a name="_label3_' + i + '_' + j + '_' + k + '"></a></div>';
+                $(jquery_h3_list[k]).before(go_to_third_Content);
+                // 三级目录的一条
+                li_content += '<li><a href="#_label3_' + i + '_' + j + '_' + k + '">' + $(jquery_h3_list[k]).text() + '</a></li>';
+            }
+            
+            if (jquery_h3_list.length > 0)
+            {
+                li_content += '</ul>';
+            }
+            li_content += '</li>';
+            // 三级目录 end
+        }
+        if (jquery_h2_list.length > 0)
+        {
+            li_content +='</ul>';
+        }
+        li_content +='</li>';
+        // 二级目录 end
+
+        content += li_content;
+    }
+    // 一级目录 end
+    content += '</ul>';
+    content += '</div>';
+
+    $($('#cnblogs_post_body')[0]).prepend(content);
+}
+
+GenerateContentList();
+</script>
+levels of contents
+<!--PageEndHtml Block End-->
+
+
+<style type="text/css">
+    /* loading */
+    .lt-sk-three-bounce {
+      margin: 2px auto;
+      width: 100%;
+      text-align: center; }
+      .lt-sk-three-bounce .lt-sk-child {
+        width: 5px;
+        height: 5px;
+        background-color: #333;
+        border-radius: 100%;
+        display: inline-block;
+        -webkit-animation: lt-sk-three-bounce 1.4s ease-in-out 0s infinite both;
+                animation: lt-sk-three-bounce 1.4s ease-in-out 0s infinite both; }
+      .lt-sk-three-bounce .lt-sk-bounce1 {
+        -webkit-animation-delay: -0.32s;
+                animation-delay: -0.32s; }
+      .lt-sk-three-bounce .lt-sk-bounce2 {
+        -webkit-animation-delay: -0.16s;
+                animation-delay: -0.16s; }
+
+    @-webkit-keyframes lt-sk-three-bounce {
+      0%, 80%, 100% {
+        -webkit-transform: scale(0);
+                transform: scale(0); }
+      40% {
+        -webkit-transform: scale(1);
+                transform: scale(1); } }
+
+    @keyframes lt-sk-three-bounce {
+      0%, 80%, 100% {
+        -webkit-transform: scale(0);
+                transform: scale(0); }
+      40% {
+        -webkit-transform: scale(1);
+                transform: scale(1); } }
+  </style><iframe id="google_osd_static_frame_6642880038601" name="google_osd_static_frame" style="display: none; width: 0px; height: 0px;"></iframe></body></html>
