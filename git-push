@@ -188,5 +188,6 @@ fatal: unable to access 'https://github.com/***/WebCrawlers.git/': Empty reply f
 上传文件的大小控制
 
 git config http.postBuffer 999999999999999
+git config http.postBuffer 524288000  //550M
 
 
