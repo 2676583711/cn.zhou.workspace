@@ -1,2 +1,0 @@
-python%E7%88%AC%E8%99%AB.pdf[[:space:]] filter=lfs diff=lfs merge=lfs -text
-python爬虫.pdf filter=lfs diff=lfs merge=lfs -text
